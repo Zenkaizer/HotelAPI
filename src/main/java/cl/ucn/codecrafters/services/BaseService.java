@@ -2,7 +2,7 @@ package cl.ucn.codecrafters.services;
 
 import cl.ucn.codecrafters.entities.Base;
 import cl.ucn.codecrafters.repositories.IBaseRepository;
-import io.ebean.annotation.Transactional;
+import jakarta.transaction.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
@@ -72,7 +72,11 @@ public abstract class BaseService<E extends Base, ID extends Serializable> imple
     public boolean delete(ID id) throws Exception {
         try {
             if (this.baseRepository.existsById(id)){
-                this.baseRepository.deleteById(id);
+                Optional<E> entityOptional = this.baseRepository.findById(id);
+                E entityDeleted = entityOptional.get();
+
+                entityDeleted.setDeleted(Boolean.TRUE);
+                this.baseRepository.save(entityDeleted);
                 return true;
             }
             else {

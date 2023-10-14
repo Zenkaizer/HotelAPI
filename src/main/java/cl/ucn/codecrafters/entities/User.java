@@ -1,10 +1,19 @@
 package cl.ucn.codecrafters.entities;
 
-import io.ebean.annotation.NotNull;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 import java.util.Date;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "user")
 public class User extends Base {
@@ -37,7 +46,6 @@ public class User extends Base {
     @Column(name = "nationality")
     private String nationality;
 
-    @NotNull
     @Column(name = "birth_date")
     private Date birthDate;
 
