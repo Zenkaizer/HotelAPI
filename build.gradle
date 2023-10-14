@@ -1,8 +1,10 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.1.3'
+	id 'org.springframework.boot' version '3.1.4'
 	id 'io.spring.dependency-management' version '1.1.3'
 	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+	id 'io.ebean' version '13.23.0'
+	id 'com.github.ben-manes.versions' version '0.49.0'
 }
 
 group = 'cl.ucn'
@@ -27,14 +29,30 @@ ext {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest:3.1.4'
+	implementation 'org.springframework.boot:spring-boot-starter-web:3.1.4'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.1.4'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+	runtimeOnly 'com.mysql:mysql-connector-j:8.1.0'
+	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.1.4'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+	implementation 'io.ebean:ebean:13.23.0'
+	implementation 'io.ebean:ebean-ddl-generator:13.23.0'
+	implementation 'io.ebean:querybean-generator:13.23.0'
+
+	implementation 'com.github.javafaker:javafaker:1.0.2'
+
+	// https://mvnrepository.com/artifact/org.hibernate/hibernate-core
+	implementation 'org.hibernate:hibernate-core:6.3.1.Final'
+
+
+
+}
+
+ebean{
+	debugLevel = 9 //0 - 9
 }
 
 tasks.named('test') {
