@@ -1,38 +1,46 @@
 package cl.ucn.codecrafters.entities;
 
-import io.ebean.annotation.NotNull;
-import io.ebean.annotation.WhenCreated;
-import io.ebean.annotation.WhenModified;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.util.Date;
+
 
 @MappedSuperclass
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Base implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private Integer id;
 
     @Version
+    @Getter(AccessLevel.PROTECTED)
+    @Setter(AccessLevel.PROTECTED)
     private Long version;
 
-    @WhenCreated
-    private Instant created;
+    @CreatedDate
+    @Getter(AccessLevel.PROTECTED)
+    @Setter(AccessLevel.PROTECTED)
+    private Date created;
 
-    @WhenModified
-    private Instant modified;
+    @LastModifiedDate
+    @Getter(AccessLevel.PROTECTED)
+    @Setter(AccessLevel.PROTECTED)
+    private Date modified;
 
     @NotNull
+    @Getter
+    @Setter
     private Boolean deleted = Boolean.FALSE;
 
 

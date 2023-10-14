@@ -1,7 +1,8 @@
 package cl.ucn.codecrafters.entities;
 
-import io.ebean.annotation.NotNull;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
 
 @Entity
 @Table(name= "role")
