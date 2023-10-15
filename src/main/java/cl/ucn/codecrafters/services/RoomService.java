@@ -15,4 +15,5 @@ public class RoomService extends BaseService<Room, Integer> implements IRoomServ
     public RoomService(IBaseRepository<Room, Integer> baseRepository) {
         super(baseRepository);
     }
+
 }
