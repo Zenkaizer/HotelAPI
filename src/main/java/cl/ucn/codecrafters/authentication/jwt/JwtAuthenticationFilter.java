@@ -28,8 +28,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
 
-
-
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
