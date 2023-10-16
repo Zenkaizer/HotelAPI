@@ -20,7 +20,7 @@ public class User extends Base {
 
     @NotNull
     @Column(name = "rut")
-    private String rut;
+    private String dni;
 
     @NotNull
     @Column(name = "email")
