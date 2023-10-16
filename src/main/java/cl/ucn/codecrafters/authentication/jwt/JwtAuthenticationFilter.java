@@ -1,4 +1,4 @@
-package cl.ucn.codecrafters.jwt;
+package cl.ucn.codecrafters.authentication.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

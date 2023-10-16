@@ -1,4 +1,4 @@
-package cl.ucn.codecrafters.controllers.authentication;
+package cl.ucn.codecrafters.authentication;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
