@@ -16,5 +16,4 @@ public class UserService extends BaseService<User, Integer> implements IUserServ
         super(baseRepository);
     }
 
-
 }
