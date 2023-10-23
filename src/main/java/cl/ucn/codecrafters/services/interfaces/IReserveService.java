@@ -1,4 +1,4 @@
-package cl.ucn.codecrafters.services;
+package cl.ucn.codecrafters.services.interfaces;
 
 import cl.ucn.codecrafters.entities.Reserve;
 

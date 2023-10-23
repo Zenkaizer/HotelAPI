@@ -1,7 +1,7 @@
 package cl.ucn.codecrafters.controllers;
 
 import cl.ucn.codecrafters.entities.User;
-import cl.ucn.codecrafters.services.IUserService;
+import cl.ucn.codecrafters.services.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

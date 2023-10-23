@@ -18,8 +18,6 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-    //private static final String SECRET_KEY = "5RDCG3V19PW2CYSK7MLXH1JV6TU4WZZQ";
-
     private SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
     private SecretKey secretKey = Keys.secretKeyFor(signatureAlgorithm);

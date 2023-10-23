@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -24,25 +26,34 @@ public class AuthService {
         return null;
     }
 
-    public AuthResponse register(RegisterRequest request) {
+    public AuthResponse register(RegisterRequest request) throws Exception {
 
-        User user = User.builder()
-                .dni(request.getDni())
-                .email(request.getEmail())
-                .password(request.getPassword())
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .phone(request.getPhone())
-                .nationality(request.getNationality())
-                .birthDate(request.getBirthDate())
-                .role(Role.CLIENT)
-                .build();
+        try {
 
-        this.userRepository.save(user);
+            if (this.userRepository.existsUserByEmail(request.getEmail())){
+                throw new Exception("[!] An User with that email is already registered [!]");
+            }
 
-        return AuthResponse.builder()
-                .token(this.jwtService.getToken(user))
-                .build();
+            User createdUser = User.builder()
+                    .dni(request.getDni())
+                    .email(request.getEmail())
+                    .password(request.getPassword())
+                    .firstName(request.getFirstName())
+                    .lastName(request.getLastName())
+                    .phone(request.getPhone())
+                    .nationality(request.getNationality())
+                    .birthDate(request.getBirthDate())
+                    .role(Role.CLIENT)
+                    .build();
 
+            this.userRepository.save(createdUser);
+
+            return AuthResponse.builder()
+                    .token(this.jwtService.getToken(createdUser))
+                    .build();
+        }
+        catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
     }
 }

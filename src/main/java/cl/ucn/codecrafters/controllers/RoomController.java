@@ -1,7 +1,7 @@
 package cl.ucn.codecrafters.controllers;
 
 import cl.ucn.codecrafters.entities.Room;
-import cl.ucn.codecrafters.services.IRoomService;
+import cl.ucn.codecrafters.services.interfaces.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
