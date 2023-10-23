@@ -8,9 +8,12 @@ import cl.ucn.codecrafters.entities.User;
 import cl.ucn.codecrafters.repositories.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +25,24 @@ public class AuthService {
     @Autowired
     private JwtService jwtService;
 
+    private final PasswordEncoder passwordEncoder;
+
+    private final AuthenticationManager authenticationManager;
+
     public AuthResponse login(LoginRequest request) {
-        return null;
+
+        // Auth the user
+        this.authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+
+        UserDetails user = this.userRepository.findByEmail(request.getEmail()).orElseThrow();
+
+        // Generate the token
+        String token = jwtService.getToken(user);
+
+        // Return the token
+        return AuthResponse.builder().token(token).build();
+
     }
 
     public AuthResponse register(RegisterRequest request) throws Exception {
@@ -37,7 +56,7 @@ public class AuthService {
             User createdUser = User.builder()
                     .dni(request.getDni())
                     .email(request.getEmail())
-                    .password(request.getPassword())
+                    .password(this.passwordEncoder.encode(request.getPassword()))
                     .firstName(request.getFirstName())
                     .lastName(request.getLastName())
                     .phone(request.getPhone())
