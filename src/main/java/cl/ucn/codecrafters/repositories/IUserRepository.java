@@ -10,4 +10,6 @@ public interface IUserRepository extends IBaseRepository<User, Integer>{
 
     Optional<User> findByEmail(String email);
 
+    Boolean existsUserByEmail(String email);
+
 }

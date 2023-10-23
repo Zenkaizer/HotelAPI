@@ -1,7 +1,8 @@
-package cl.ucn.codecrafters.services;
+package cl.ucn.codecrafters.services.models;
 
 import cl.ucn.codecrafters.entities.Base;
 import cl.ucn.codecrafters.repositories.IBaseRepository;
+import cl.ucn.codecrafters.services.interfaces.IBaseService;
 import jakarta.transaction.Transactional;
 
 import java.io.Serializable;
