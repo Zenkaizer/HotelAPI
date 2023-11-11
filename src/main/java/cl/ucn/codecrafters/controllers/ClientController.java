@@ -1,6 +1,7 @@
 package cl.ucn.codecrafters.controllers;
 
 import cl.ucn.codecrafters.entities.User;
+import cl.ucn.codecrafters.entities.dto.ClientDto;
 import cl.ucn.codecrafters.services.interfaces.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +45,8 @@ public class ClientController {
     public ResponseEntity<?> getOneClient(@PathVariable Integer id) {
         try {
 
-            User value = this.userService.findById(id);
-
-
-
-            return ResponseEntity.status(HttpStatus.OK).body(this.userService.findById(id));
+            ClientDto clientDto = this.userService.findById(ClientDto.class, id);
+            return ResponseEntity.status(HttpStatus.OK).body(clientDto);
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

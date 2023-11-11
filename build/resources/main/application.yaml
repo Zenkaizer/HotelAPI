@@ -8,7 +8,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/db_codecrafters
     username: root
-    password: mcnspede1_
+    password: niblet
   sql:
     init:
       platform: org.hibernate.dialect.MySQL8Dialect
