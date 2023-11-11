@@ -7,7 +7,6 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public abstract class UserDto {
 
     private String dni;
