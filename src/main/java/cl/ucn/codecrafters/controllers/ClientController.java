@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "clients")
+@Secured({ "ADMINITRATIVE" })
 public class ClientController {
 
     @Autowired
@@ -48,7 +51,12 @@ public class ClientController {
         try {
 
             ClientDto clientDto = this.userService.findUserById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(clientDto);
+            if (clientDto == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("{\"error\":\"Error, usuario no encontrado.\"}");
+            }else{
+                return ResponseEntity.status(HttpStatus.OK).body(clientDto);
+            }
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

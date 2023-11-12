@@ -5,6 +5,7 @@ import cl.ucn.codecrafters.entities.dto.AdministrativeDto;
 import cl.ucn.codecrafters.entities.dto.ClientDto;
 import cl.ucn.codecrafters.entities.dto.UserDto;
 import cl.ucn.codecrafters.entities.errors.UserError;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 

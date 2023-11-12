@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "administratives")
+@Secured({ "ADMINISTRATOR" })
 public class AdministrativeController {
 
     @Autowired
@@ -47,11 +49,18 @@ public class AdministrativeController {
         try {
 
             AdministrativeDto administrativeDto = this.userService.findUserById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(administrativeDto);
+
+            if (administrativeDto == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("{\"error\":\"Error, usuario no encontrado.\"}");
+            }else{
+                return ResponseEntity.status(HttpStatus.OK).body(administrativeDto);
+            }
+
         }
-        catch (NoFoundUserException e){
+        catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("{\"error\":\"" + e.getMessage() + "\"}");
+                    .body("{\"error\":\"Error, por favor intente más tarde.\"}");
         }
     }
 

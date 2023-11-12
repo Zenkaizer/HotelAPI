@@ -105,7 +105,8 @@ public class UserService extends BaseService<User, Integer> implements IUserServ
 
             return (E) clientDto;
 
-        }else{
+        }
+        if (userProvided.getRole().equals(Role.ADMINISTRATIVE)){
 
             AdministrativeDto administrativeDto = new AdministrativeDto();
 
@@ -118,6 +119,8 @@ public class UserService extends BaseService<User, Integer> implements IUserServ
             return (E) administrativeDto;
 
         }
+
+        return null;
     }
 
     @Override
@@ -170,4 +173,5 @@ public class UserService extends BaseService<User, Integer> implements IUserServ
         userErrors.setIsValid(isValid);
         return userErrors;
     }
+
 }
