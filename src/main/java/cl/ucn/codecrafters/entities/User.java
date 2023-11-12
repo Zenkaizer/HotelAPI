@@ -21,8 +21,8 @@ import java.util.List;
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class User extends Base implements UserDetails {
 
-    @NotNull(message = "El campo no puede ser nulo.")
-    @NotEmpty(message = "El campo no puede estar vacío.")
+    @NotNull
+    @NotEmpty
     @Column(name = "rut")
     private String dni;
 

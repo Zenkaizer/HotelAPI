@@ -1,6 +1,8 @@
 package cl.ucn.codecrafters.controllers;
 import cl.ucn.codecrafters.entities.User;
 import cl.ucn.codecrafters.entities.dto.AdministrativeDto;
+import cl.ucn.codecrafters.entities.errors.UserError;
+import cl.ucn.codecrafters.exceptions.NoFoundUserException;
 import cl.ucn.codecrafters.services.interfaces.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,20 +46,27 @@ public class AdministrativeController {
     public ResponseEntity<?> getOneAdministrative(@PathVariable Integer id) {
         try {
 
-            AdministrativeDto administrativeDto = this.userService.findById(AdministrativeDto.class, id);
+            AdministrativeDto administrativeDto = this.userService.findUserById(id);
             return ResponseEntity.status(HttpStatus.OK).body(administrativeDto);
         }
-        catch (Exception e){
+        catch (NoFoundUserException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("{\"error\":\"Error, por favor intente más tarde.\"}");
+                    .body("{\"error\":\"" + e.getMessage() + "\"}");
         }
     }
 
     @PostMapping("")
-    public ResponseEntity<?> save(@Valid @RequestBody User entity) {
+    public ResponseEntity<?> save(@RequestBody User entity) {
         try {
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.save(entity));
+            UserError userError = this.userService.validateUserErrors(entity);
+
+            if (userError.getIsValid()){
+                return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.save(entity));
+            }
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userError);
+
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -68,7 +77,15 @@ public class AdministrativeController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody User entity) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(this.userService.update(id, entity));
+
+            UserError userError = this.userService.validateUserErrors(entity);
+
+            if (userError.getIsValid()){
+                return ResponseEntity.status(HttpStatus.OK).body(this.userService.update(id, entity));
+            }
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userError);
+
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

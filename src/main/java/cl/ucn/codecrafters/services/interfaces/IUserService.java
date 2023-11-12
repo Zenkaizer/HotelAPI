@@ -4,6 +4,7 @@ import cl.ucn.codecrafters.entities.User;
 import cl.ucn.codecrafters.entities.dto.AdministrativeDto;
 import cl.ucn.codecrafters.entities.dto.ClientDto;
 import cl.ucn.codecrafters.entities.dto.UserDto;
+import cl.ucn.codecrafters.entities.errors.UserError;
 
 import java.util.List;
 
@@ -13,7 +14,9 @@ public interface IUserService extends IBaseService<User, Integer> {
 
     List<AdministrativeDto> findAllAdministratives();
 
-    <E extends UserDto> E findById(Class<E> classType, Integer id);
+    <E extends UserDto> E findUserById(Integer id);
+
+    UserError validateUserErrors(User user);
 
 
 }

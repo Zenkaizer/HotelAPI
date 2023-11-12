@@ -5,14 +5,17 @@ import cl.ucn.codecrafters.entities.User;
 import cl.ucn.codecrafters.entities.dto.AdministrativeDto;
 import cl.ucn.codecrafters.entities.dto.ClientDto;
 import cl.ucn.codecrafters.entities.dto.UserDto;
+import cl.ucn.codecrafters.entities.errors.UserError;
 import cl.ucn.codecrafters.exceptions.NoFoundUserException;
 import cl.ucn.codecrafters.repositories.IBaseRepository;
 import cl.ucn.codecrafters.repositories.IUserRepository;
 import cl.ucn.codecrafters.services.interfaces.IUserService;
+import cl.ucn.codecrafters.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,7 +83,7 @@ public class UserService extends BaseService<User, Integer> implements IUserServ
     }
 
     @Override
-    public <E extends UserDto> E findById(Class<E> classType, Integer id) {
+    public <E extends UserDto> E findUserById(Integer id) {
 
         Optional<User> user = this.userRepository.findById(id);
 
@@ -90,7 +93,7 @@ public class UserService extends BaseService<User, Integer> implements IUserServ
 
         User userProvided = user.get();
 
-        if (classType.equals(ClientDto.class)){
+        if (userProvided.getRole().equals(Role.CLIENT)){
 
             ClientDto clientDto = new ClientDto();
 
@@ -115,5 +118,56 @@ public class UserService extends BaseService<User, Integer> implements IUserServ
             return (E) administrativeDto;
 
         }
+    }
+
+    @Override
+    public UserError validateUserErrors(User user) {
+
+        UserError userErrors = new UserError();
+        Boolean isValid = Boolean.TRUE;
+
+        if (user.getDni() == null || user.getDni().trim().isEmpty()) {
+            userErrors.setDniError("El RUT/DNI no puede ser vacío o nulo.");
+            isValid = Boolean.FALSE;
+
+        }
+        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+            userErrors.setEmailError("El correo electrónico es inválido.");
+            isValid = Boolean.FALSE;
+
+        }
+        if (!Validation.validatePattern("^(?=.*[A-Z])(?=.*\\\\d).{8,}$", user.getPassword())) {
+            userErrors.setPasswordError("La contraseña no cumple con los requisitos mínimos.");
+            isValid = Boolean.FALSE;
+
+        }
+        if (user.getFirstName() == null || user.getFirstName().trim().isEmpty()) {
+            userErrors.setFirstNameError("El campo no puede ser nulo o vacío.");
+            isValid = Boolean.FALSE;
+
+        }
+        if (user.getLastName() == null || user.getLastName().trim().isEmpty()) {
+            userErrors.setLastNameError("El campo no puede ser nulo o vacío.");
+            isValid = Boolean.FALSE;
+
+        }
+        if (user.getPhone().length() < 8 || !user.getPhone().matches("\\d+")) {
+            userErrors.setPhoneError("El teléfono debe contener al menos 8 dígitos y debe contener solo números.");
+            isValid = Boolean.FALSE;
+
+        }
+        if (user.getNationality() == null || user.getNationality().trim().isEmpty()) {
+            userErrors.setNationalityError("El campo no puede ser nulo o vacío.");
+            isValid = Boolean.FALSE;
+
+        }
+        if (user.getBirthDate() == null ||user.getBirthDate().after(new Date())) {
+            userErrors.setBirthDateError("La fecha de nacimiento no puede ser posterior a la actual.");
+            isValid = Boolean.FALSE;
+
+        }
+
+        userErrors.setIsValid(isValid);
+        return userErrors;
     }
 }

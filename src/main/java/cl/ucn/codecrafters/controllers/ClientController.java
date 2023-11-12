@@ -2,7 +2,9 @@ package cl.ucn.codecrafters.controllers;
 
 import cl.ucn.codecrafters.entities.User;
 import cl.ucn.codecrafters.entities.dto.ClientDto;
+import cl.ucn.codecrafters.entities.errors.UserError;
 import cl.ucn.codecrafters.services.interfaces.IUserService;
+import cl.ucn.codecrafters.utils.Validation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +47,7 @@ public class ClientController {
     public ResponseEntity<?> getOneClient(@PathVariable Integer id) {
         try {
 
-            ClientDto clientDto = this.userService.findById(ClientDto.class, id);
+            ClientDto clientDto = this.userService.findUserById(id);
             return ResponseEntity.status(HttpStatus.OK).body(clientDto);
         }
         catch (Exception e){
@@ -58,7 +60,13 @@ public class ClientController {
     public ResponseEntity<?> save(@Valid @RequestBody User entity) {
         try {
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.save(entity));
+            UserError userError = this.userService.validateUserErrors(entity);
+
+            if (userError.getIsValid()){
+                return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.save(entity));
+            }
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userError);
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -69,7 +77,13 @@ public class ClientController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody User entity) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(this.userService.update(id, entity));
+            UserError userError = this.userService.validateUserErrors(entity);
+
+            if (userError.getIsValid()){
+                return ResponseEntity.status(HttpStatus.OK).body(this.userService.update(id, entity));
+            }
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userError);
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
