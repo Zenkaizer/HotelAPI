@@ -2,9 +2,7 @@ package cl.ucn.codecrafters.controllers;
 import cl.ucn.codecrafters.entities.User;
 import cl.ucn.codecrafters.entities.dto.AdministrativeDto;
 import cl.ucn.codecrafters.entities.errors.UserError;
-import cl.ucn.codecrafters.exceptions.NoFoundUserException;
 import cl.ucn.codecrafters.services.interfaces.IUserService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +46,7 @@ public class AdministrativeController {
     public ResponseEntity<?> getOneAdministrative(@PathVariable Integer id) {
         try {
 
-            AdministrativeDto administrativeDto = this.userService.findUserById(id);
+            AdministrativeDto administrativeDto = this.userService.findUserDtoById(id);
 
             if (administrativeDto == null){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -71,7 +69,7 @@ public class AdministrativeController {
             UserError userError = this.userService.validateUserErrors(entity);
 
             if (userError.getIsValid()){
-                return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.save(entity));
+                return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.saveAdministrative(entity));
             }
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userError);

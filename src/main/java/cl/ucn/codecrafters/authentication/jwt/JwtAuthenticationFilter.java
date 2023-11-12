@@ -1,6 +1,8 @@
 package cl.ucn.codecrafters.authentication.jwt;
 
 import cl.ucn.codecrafters.services.JwtService;
+import cl.ucn.codecrafters.services.interfaces.IUserService;
+import cl.ucn.codecrafters.services.models.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private final UserService userService;
 
 
     @Override
@@ -44,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null){
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = userService.loadUserByUsername(username);
 
             if (jwtService.isTokenValid(token, userDetails)){
 

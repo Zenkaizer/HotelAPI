@@ -22,43 +22,34 @@ import java.util.List;
 public class User extends Base implements UserDetails {
 
     @NotNull
-    @NotEmpty
     @Column(name = "rut")
     private String dni;
 
     @NotNull
-    @Email(message = "El correo electrónico es inválido.")
     @Column(name = "email", nullable = false)
     private String email;
 
     @NotNull
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d).{8,}$", message = "La contraseña no cumple con los requisitos mínimos.")
     @Column(name = "password")
     private String password;
 
-    @NotNull(message = "El campo no puede ser nulo.")
-    @NotEmpty(message = "El campo no puede estar vacío.")
+    @NotNull
     @Column(name = "first_name")
     private String firstName;
 
-    @NotNull(message = "El campo no puede ser nulo.")
-    @NotEmpty(message = "El campo no puede estar vacío.")
+    @NotNull
     @Column(name = "last_name")
     private String lastName;
 
-    @NotNull(message = "El campo no puede ser nulo.")
-    @NotEmpty(message = "El campo no puede estar vacío.")
-    @Pattern(regexp = "^[0-9]{8,}$", message = "El teléfono debe contener al menos 8 dígitos y debe contener solo números.")
+    @NotNull
     @Column(name = "phone")
     private String phone;
 
     @NotNull
-    @NotBlank
     @Column(name = "nationality")
     private String nationality;
 
     @NotNull
-    @Past(message = "La fecha de nacimiento no puede ser posterior a la actual.")
     @Column(name = "birth_date")
     private Date birthDate;
 

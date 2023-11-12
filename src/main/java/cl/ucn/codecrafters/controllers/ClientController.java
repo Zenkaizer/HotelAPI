@@ -4,7 +4,6 @@ import cl.ucn.codecrafters.entities.User;
 import cl.ucn.codecrafters.entities.dto.ClientDto;
 import cl.ucn.codecrafters.entities.errors.UserError;
 import cl.ucn.codecrafters.services.interfaces.IUserService;
-import cl.ucn.codecrafters.utils.Validation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "clients")
-@Secured({ "ADMINITRATIVE" })
+@PreAuthorize("hasRole('ROLE_ADMINISTRATIVE')")
 public class ClientController {
 
     @Autowired
@@ -50,7 +49,7 @@ public class ClientController {
     public ResponseEntity<?> getOneClient(@PathVariable Integer id) {
         try {
 
-            ClientDto clientDto = this.userService.findUserById(id);
+            ClientDto clientDto = this.userService.findUserDtoById(id);
             if (clientDto == null){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("{\"error\":\"Error, usuario no encontrado.\"}");
@@ -71,7 +70,7 @@ public class ClientController {
             UserError userError = this.userService.validateUserErrors(entity);
 
             if (userError.getIsValid()){
-                return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.save(entity));
+                return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.saveClient(entity));
             }
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userError);
