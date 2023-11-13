@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
     private final JwtService jwtService;
-    private final UserService userService;
+    private final UserDetailsService userService;
 
 
     @Override
@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String token = getTokenFromRequest(request);
         final String username;
 
-        if (token == null){
+        if (token == null || token.equals("null")){
             filterChain.doFilter(request, response);
             return;
         }
