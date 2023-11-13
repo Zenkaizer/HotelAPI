@@ -1,0 +1,17 @@
+spring:
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/db_codecrafters
+    username: root
+    password: ${MYSQL_PASSWORD:mcnspede1_}
+  sql:
+    init:
+      platform: org.hibernate.dialect.MySQL8Dialect
+
+server:
+  port: 9000
