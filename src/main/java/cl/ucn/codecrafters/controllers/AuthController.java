@@ -47,7 +47,7 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
 
-
+            System.out.println(request.toString());
 
 
 
