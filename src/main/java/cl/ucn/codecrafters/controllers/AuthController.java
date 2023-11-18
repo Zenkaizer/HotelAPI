@@ -46,8 +46,15 @@ public class AuthController {
     @PostMapping(value = "register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(this.authService.register(request));
+
+            System.out.println(request.toString());
+
+
+
+
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(this.authService.register(request));
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

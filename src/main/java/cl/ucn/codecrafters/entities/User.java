@@ -1,7 +1,7 @@
 package cl.ucn.codecrafters.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -49,6 +49,7 @@ public class User extends Base implements UserDetails {
     @Column(name = "nationality")
     private String nationality;
 
+    @NotNull
     @Column(name = "birth_date")
     private Date birthDate;
 

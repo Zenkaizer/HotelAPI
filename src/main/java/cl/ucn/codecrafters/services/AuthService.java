@@ -5,9 +5,13 @@ import cl.ucn.codecrafters.authentication.LoginRequest;
 import cl.ucn.codecrafters.authentication.RegisterRequest;
 import cl.ucn.codecrafters.entities.Role;
 import cl.ucn.codecrafters.entities.User;
+import cl.ucn.codecrafters.entities.errors.UserError;
 import cl.ucn.codecrafters.repositories.IUserRepository;
+import cl.ucn.codecrafters.services.interfaces.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +25,9 @@ public class AuthService {
 
     @Autowired
     private IUserRepository userRepository;
+
+    @Autowired
+    private IUserService userService;
 
     @Autowired
     private JwtService jwtService;
