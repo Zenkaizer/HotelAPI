@@ -17,10 +17,16 @@ services:
     image: springboot-app
     build: .
     ports:
-      - "9090:9000"
+      - "9000:9000"
     environment:
       MYSQL_HOST: mysqldb
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_PORT: 3306
+
+  react-app:
+    container_name: react-app
+    image: react-app
+    ports:
+      - "3000:3000"
 

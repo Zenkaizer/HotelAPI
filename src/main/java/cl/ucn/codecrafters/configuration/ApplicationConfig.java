@@ -1,6 +1,6 @@
 package cl.ucn.codecrafters.configuration;
 
-import cl.ucn.codecrafters.repositories.IUserRepository;
+import cl.ucn.codecrafters.user.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -43,7 +43,7 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailService() {
         return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("[!] User not found [!]"));
+                .orElseThrow(() -> new UsernameNotFoundException("[!] Usuario no encontrado [!]"));
 
     }
 
