@@ -1,8 +1,7 @@
 package cl.ucn.codecrafters;
 
-import cl.ucn.codecrafters.user.Role;
-import cl.ucn.codecrafters.user.User;
-import cl.ucn.codecrafters.user.UserService;
+import cl.ucn.codecrafters.user.domain.User;
+import cl.ucn.codecrafters.user.application.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

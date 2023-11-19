@@ -1,6 +1,6 @@
 package cl.ucn.codecrafters.configuration;
 
-import cl.ucn.codecrafters.token.TokenRepository;
+import cl.ucn.codecrafters.token.ITokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
-    private final TokenRepository tokenRepository;
+    private final ITokenRepository tokenRepository;
 
     /**
      * {@inheritDoc}
