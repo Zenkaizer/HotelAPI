@@ -1,7 +1,6 @@
 package cl.ucn.codecrafters.token;
 
-import cl.ucn.codecrafters.entities.Base;
-import cl.ucn.codecrafters.entities.User;
+import cl.ucn.codecrafters.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 

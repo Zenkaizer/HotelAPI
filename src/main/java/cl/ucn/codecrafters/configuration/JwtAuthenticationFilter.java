@@ -1,6 +1,7 @@
 package cl.ucn.codecrafters.configuration;
 
 import cl.ucn.codecrafters.auth.JwtService;
+import cl.ucn.codecrafters.token.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
 
     /**
      * {@inheritDoc}
@@ -47,7 +49,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isTokenValid(jwt, userDetails)){
+
+            var isTokenValid = tokenRepository.findByToken(jwt)
+                    .map(token -> !token.getExpired() && !token.getRevoked()).orElse(Boolean.FALSE);
+
+            if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,

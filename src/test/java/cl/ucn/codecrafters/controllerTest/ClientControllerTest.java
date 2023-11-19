@@ -1,10 +1,10 @@
 package cl.ucn.codecrafters.controllerTest;
 
-import cl.ucn.codecrafters.controllers.ClientController;
-import cl.ucn.codecrafters.entities.User;
-import cl.ucn.codecrafters.dto.ClientDto;
-import cl.ucn.codecrafters.errors.UserError;
-import cl.ucn.codecrafters.services.interfaces.IUserService;
+import cl.ucn.codecrafters.user.controllers.ClientController;
+import cl.ucn.codecrafters.user.User;
+import cl.ucn.codecrafters.user.dto.ClientDto;
+import cl.ucn.codecrafters.user.UserError;
+import cl.ucn.codecrafters.user.IUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

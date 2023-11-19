@@ -1,6 +1,6 @@
 package cl.ucn.codecrafters.configuration;
 
-import cl.ucn.codecrafters.repositories.IUserRepository;
+import cl.ucn.codecrafters.user.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
