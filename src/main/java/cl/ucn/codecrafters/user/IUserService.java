@@ -29,5 +29,7 @@ public interface IUserService {
 
     User saveAdministrative(User entity) throws Exception;
 
+    User saveAdmin(User entity) throws Exception;
+
 
 }

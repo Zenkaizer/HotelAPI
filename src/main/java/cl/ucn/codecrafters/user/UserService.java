@@ -262,6 +262,29 @@ public class UserService implements IUserService {
     }
 
     /**
+     * Method responsible for storing an entity in the database.
+     *
+     * @param entity Entity.
+     * @return The saved entity.
+     * @throws Exception Exception.
+     */
+    @Override
+    public User saveAdmin(User entity) throws Exception {
+        try {
+
+            // Password encode and role assignation.
+            entity.setPassword(this.passwordEncoder.encode(entity.getPassword()));
+            entity.setRole(Role.ADMIN);
+
+            entity = this.userRepository.save(entity);
+            return entity;
+        }
+        catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    /**
      * Method responsible for updating an entity in the database.
      *
      * @param integer Entity ID.
