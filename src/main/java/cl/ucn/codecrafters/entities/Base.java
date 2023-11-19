@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -31,12 +32,12 @@ public abstract class Base implements Serializable {
     @CreatedDate
     @Getter(AccessLevel.PROTECTED)
     @Setter(AccessLevel.PROTECTED)
-    private Date created;
+    private LocalDateTime created;
 
     @LastModifiedDate
     @Getter(AccessLevel.PROTECTED)
     @Setter(AccessLevel.PROTECTED)
-    private Date modified;
+    private LocalDateTime modified;
 
     @NotNull
     @Getter

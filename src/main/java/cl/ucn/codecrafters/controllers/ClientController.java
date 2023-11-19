@@ -1,14 +1,13 @@
 package cl.ucn.codecrafters.controllers;
 
 import cl.ucn.codecrafters.entities.User;
-import cl.ucn.codecrafters.entities.dto.ClientDto;
-import cl.ucn.codecrafters.entities.errors.UserError;
+import cl.ucn.codecrafters.dto.ClientDto;
+import cl.ucn.codecrafters.errors.UserError;
 import cl.ucn.codecrafters.services.interfaces.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 

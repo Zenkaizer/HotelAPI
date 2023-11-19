@@ -1,6 +1,5 @@
 package cl.ucn.codecrafters.configuration;
 
-import cl.ucn.codecrafters.authentication.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +36,7 @@ public class SecurityConfig{
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
+
     }
 
 }

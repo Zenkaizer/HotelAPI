@@ -1,7 +1,7 @@
 package cl.ucn.codecrafters.controllers;
 import cl.ucn.codecrafters.entities.User;
-import cl.ucn.codecrafters.entities.dto.AdministrativeDto;
-import cl.ucn.codecrafters.entities.errors.UserError;
+import cl.ucn.codecrafters.dto.AdministrativeDto;
+import cl.ucn.codecrafters.errors.UserError;
 import cl.ucn.codecrafters.services.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

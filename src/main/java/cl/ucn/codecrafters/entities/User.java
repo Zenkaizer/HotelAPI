@@ -1,5 +1,6 @@
 package cl.ucn.codecrafters.entities;
 
+import cl.ucn.codecrafters.token.Token;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -12,8 +13,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper = true)
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -21,45 +22,43 @@ import java.util.List;
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class User extends Base implements UserDetails {
 
-    @NotNull
     @Column(name = "rut")
     private String dni;
 
-    @NotNull
     @Column(name = "email", nullable = false)
     private String email;
 
-    @NotNull
     @Column(name = "password")
     private String password;
 
-    @NotNull
     @Column(name = "first_name")
     private String firstName;
 
-    @NotNull
     @Column(name = "last_name")
     private String lastName;
 
-    @NotNull
     @Column(name = "phone")
     private String phone;
 
-    @NotNull
     @Column(name = "nationality")
     private String nationality;
 
-    @NotNull
     @Column(name = "birth_date")
     private Date birthDate;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
+
+    @Override
+    public String getPassword() { return this.password; }
 
     @Override
     public String getUsername() { return this.email; }
