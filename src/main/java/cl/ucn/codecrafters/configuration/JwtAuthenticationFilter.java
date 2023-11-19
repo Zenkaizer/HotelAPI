@@ -1,7 +1,7 @@
 package cl.ucn.codecrafters.configuration;
 
-import cl.ucn.codecrafters.auth.JwtService;
-import cl.ucn.codecrafters.token.TokenRepository;
+import cl.ucn.codecrafters.auth.application.JwtService;
+import cl.ucn.codecrafters.token.ITokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final TokenRepository tokenRepository;
+    private final ITokenRepository tokenRepository;
 
     /**
      * {@inheritDoc}
