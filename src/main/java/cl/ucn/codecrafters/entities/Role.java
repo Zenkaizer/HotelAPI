@@ -1,14 +1,9 @@
 package cl.ucn.codecrafters.entities;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+public enum Role{
 
+    ADMINISTRATOR,
+    ADMINISTRATIVE,
+    CLIENT
 
-@Entity
-@Table(name= "role")
-public class Role extends Base{
-
-    @NotNull
-    @Column(name = "role_name")
-    private String roleName;
 }

@@ -1,7 +1,7 @@
 package cl.ucn.codecrafters.controllers;
 
 import cl.ucn.codecrafters.entities.Reserve;
-import cl.ucn.codecrafters.services.IReserveService;
+import cl.ucn.codecrafters.services.interfaces.IReserveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

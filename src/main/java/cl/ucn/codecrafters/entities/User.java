@@ -1,29 +1,32 @@
 package cl.ucn.codecrafters.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "user")
-public class User extends Base {
+@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+public class User extends Base implements UserDetails {
 
     @NotNull
     @Column(name = "rut")
-    private String rut;
+    private String dni;
 
     @NotNull
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
     @NotNull
@@ -46,10 +49,30 @@ public class User extends Base {
     @Column(name = "nationality")
     private String nationality;
 
+    @NotNull
     @Column(name = "birth_date")
     private Date birthDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_role", referencedColumnName = "id")
+    @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() { return this.email; }
+
+    @Override
+    public boolean isAccountNonExpired() { return true; }
+
+    @Override
+    public boolean isAccountNonLocked() { return true; }
+
+    @Override
+    public boolean isCredentialsNonExpired() { return true; }
+
+    @Override
+    public boolean isEnabled() { return true; }
 }
