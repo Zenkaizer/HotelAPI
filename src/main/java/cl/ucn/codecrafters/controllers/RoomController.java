@@ -1,15 +1,20 @@
 package cl.ucn.codecrafters.controllers;
 
 import cl.ucn.codecrafters.entities.Room;
+import cl.ucn.codecrafters.entities.errors.RoomError;
 import cl.ucn.codecrafters.services.interfaces.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "rooms")
+//@Secured({"ADMINISTRATIVE"})
 public class RoomController implements IBaseController<Room, Integer>{
 
     @Autowired
@@ -19,7 +24,13 @@ public class RoomController implements IBaseController<Room, Integer>{
     @GetMapping("")
     public ResponseEntity<?> getAll() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(this.roomService.findAll());
+            List<?> roomList = this.roomService.findAll();
+
+            if (roomList.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.OK).body("{\"error\":\"No hay habitaciones para mostrar.\"}");
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(roomList);
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -44,7 +55,13 @@ public class RoomController implements IBaseController<Room, Integer>{
     public ResponseEntity<?> save(@RequestBody Room entity) {
         try {
 
-            return ResponseEntity.status(HttpStatus.OK).body(this.roomService.save(entity));
+            RoomError roomError = this.roomService.validateRoomErrors(entity);
+
+            if(roomError.getIsValid()){
+                return ResponseEntity.status(HttpStatus.OK).body(this.roomService.save(entity));
+            }
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(roomError);
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -56,7 +73,15 @@ public class RoomController implements IBaseController<Room, Integer>{
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody Room entity) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(this.roomService.update(id, entity));
+
+            RoomError roomError = this.roomService.validateRoomErrors(entity);
+
+            if(roomError.getIsValid()){
+                return ResponseEntity.status(HttpStatus.OK).body(this.roomService.update(id, entity));
+            }
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(roomError);
+
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

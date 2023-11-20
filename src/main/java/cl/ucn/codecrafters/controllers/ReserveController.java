@@ -1,11 +1,14 @@
 package cl.ucn.codecrafters.controllers;
 
 import cl.ucn.codecrafters.entities.Reserve;
+import cl.ucn.codecrafters.entities.errors.ReserveError;
 import cl.ucn.codecrafters.services.interfaces.IReserveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -16,10 +19,16 @@ public class ReserveController implements IBaseController<Reserve, Integer>{
     private IReserveService reserveService;
 
     @Override
-    @GetMapping("")
+    @GetMapping()
     public ResponseEntity<?> getAll() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(this.reserveService.findAll());
+            List<?> reserveList = this.reserveService.findAll();
+
+            if (reserveList.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.OK).body("{\"error\":\"No hay reservas por mostrar.\"}");
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(reserveList);
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -44,7 +53,13 @@ public class ReserveController implements IBaseController<Reserve, Integer>{
     public ResponseEntity<?> save(@RequestBody Reserve entity) {
         try {
 
-            return ResponseEntity.status(HttpStatus.OK).body(this.reserveService.save(entity));
+            ReserveError reserveError= this.reserveService.validateReserveErrors(entity);
+
+            if(reserveError.getIsValid()){
+                return ResponseEntity.status(HttpStatus.OK).body(this.reserveService.save(entity));
+            }
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(reserveError);
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -56,7 +71,13 @@ public class ReserveController implements IBaseController<Reserve, Integer>{
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id,@RequestBody Reserve entity) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(this.reserveService.update(id, entity));
+            ReserveError reserveError = this.reserveService.validateReserveErrors(entity);
+
+            if (reserveError.getIsValid()){
+                return ResponseEntity.status(HttpStatus.OK).body(this.reserveService.update(id, entity));
+            }
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(reserveError);
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

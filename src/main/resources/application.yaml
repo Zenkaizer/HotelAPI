@@ -6,9 +6,9 @@ spring:
       ddl-auto: update
 
   datasource:
-    url: jdbc:mysql://localhost:3306/db_codecrafters
+    url: jdbc:mysql://localhost:3307/db_codecrafters
     username: root
-    password: mcnspede1_
+    password: root123
   sql:
     init:
       platform: org.hibernate.dialect.MySQL8Dialect
