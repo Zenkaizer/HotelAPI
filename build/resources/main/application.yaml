@@ -3,12 +3,16 @@ spring:
     database: MYSQL
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
   datasource:
     url: jdbc:mysql://localhost:3307/db_codecrafters
     username: root
+<<<<<<< HEAD
     password: root123
+=======
+    password: niblet
+>>>>>>> 7bbfaca4a411ff62d3aa8e522016b9a6ea1c26a7
   sql:
     init:
       platform: org.hibernate.dialect.MySQL8Dialect
