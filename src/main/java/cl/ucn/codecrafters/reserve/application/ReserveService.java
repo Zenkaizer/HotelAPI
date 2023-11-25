@@ -31,9 +31,8 @@ public class ReserveService implements IReserveService {
 
         List<Reserve> reserveList = this.reserveRepository.findAll();
 
-        //TODO: Valida envio null en controlador
         if(reserveList.isEmpty()){
-            return null;
+            throw new Exception("No existen reservas en sistema");
         }
 
         //FIXME: Utilizar el metodo sort con menor complejidad
