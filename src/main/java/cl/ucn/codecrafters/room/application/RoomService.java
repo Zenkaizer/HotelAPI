@@ -1,14 +1,8 @@
 package cl.ucn.codecrafters.room.application;
 
-<<<<<<< HEAD:src/main/java/cl/ucn/codecrafters/services/models/RoomService.java
-import cl.ucn.codecrafters.entities.Room;
-import cl.ucn.codecrafters.entities.errors.RoomError;
-import cl.ucn.codecrafters.repositories.IRoomRepository;
-import cl.ucn.codecrafters.services.interfaces.IRoomService;
-=======
+import cl.ucn.codecrafters.room.domain.RoomError;
 import cl.ucn.codecrafters.room.domain.IRoomRepository;
 import cl.ucn.codecrafters.room.domain.Room;
->>>>>>> 7bbfaca4a411ff62d3aa8e522016b9a6ea1c26a7:src/main/java/cl/ucn/codecrafters/room/application/RoomService.java
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

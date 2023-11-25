@@ -1,14 +1,8 @@
 package cl.ucn.codecrafters.reserve.application;
 
-<<<<<<< HEAD:src/main/java/cl/ucn/codecrafters/services/models/ReserveService.java
-import cl.ucn.codecrafters.entities.Reserve;
-import cl.ucn.codecrafters.entities.errors.ReserveError;
-import cl.ucn.codecrafters.repositories.IReserveRepository;
-import cl.ucn.codecrafters.services.interfaces.IReserveService;
-=======
+import cl.ucn.codecrafters.reserve.domain.ReserveError;
 import cl.ucn.codecrafters.reserve.domain.IReserveRepository;
 import cl.ucn.codecrafters.reserve.domain.Reserve;
->>>>>>> 7bbfaca4a411ff62d3aa8e522016b9a6ea1c26a7:src/main/java/cl/ucn/codecrafters/reserve/application/ReserveService.java
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +31,12 @@ public class ReserveService implements IReserveService {
 
         List<Reserve> reserveList = this.reserveRepository.findAll();
 
-        //TODO: Consultar sobre excepcion a lanzar
+        //TODO: Valida envio null en controlador
         if(reserveList.isEmpty()){
             return null;
         }
 
-        //FIXME: ¿Stream sorted o sorted?
+        //FIXME: Utilizar el metodo sort con menor complejidad
         reserveList.stream().sorted(Comparator.comparing(Reserve::getReserveDateTime));
 
         return reserveList;

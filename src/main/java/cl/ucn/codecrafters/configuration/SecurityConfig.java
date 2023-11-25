@@ -57,6 +57,13 @@ public class SecurityConfig{
                     .requestMatchers(PUT, "/reserves/**").hasAuthority(CLIENT_UPDATE.name())
                     .requestMatchers(DELETE, "/reserves/**").hasAuthority(CLIENT_DELETE.name())
 
+                        .requestMatchers("/rooms/**").hasAnyRole(CLIENT.name(),ADMINISTRATIVE.name(),ADMIN.name())
+
+                        .requestMatchers(GET,"/rooms/**").hasAnyAuthority(CLIENT_READ.name())
+                        .requestMatchers(POST,"/rooms/**").hasAnyAuthority(ADMINISTRATIVE_CREATE.name(), ADMIN_CREATE.name())
+                        .requestMatchers(PUT,"/rooms/¨**").hasAnyAuthority(ADMINISTRATIVE_UPDATE.name(), ADMIN_UPDATE.name())
+                        .requestMatchers(DELETE,"/rooms/**").hasAnyAuthority(ADMIN_DELETE.name(),ADMINISTRATIVE_DELETE.name())
+
                     .anyRequest().authenticated()
             )
             .sessionManagement(sessionMannager ->

@@ -1,18 +1,14 @@
 package cl.ucn.codecrafters.room.infraestructure;
 
-<<<<<<< HEAD:src/main/java/cl/ucn/codecrafters/controllers/RoomController.java
-import cl.ucn.codecrafters.entities.Room;
-import cl.ucn.codecrafters.entities.errors.RoomError;
-import cl.ucn.codecrafters.services.interfaces.IRoomService;
-=======
+
+import cl.ucn.codecrafters.room.domain.RoomError;
 import cl.ucn.codecrafters.room.application.IRoomService;
+
 import cl.ucn.codecrafters.room.domain.Room;
 import cl.ucn.codecrafters.utils.IBaseController;
->>>>>>> 7bbfaca4a411ff62d3aa8e522016b9a6ea1c26a7:src/main/java/cl/ucn/codecrafters/room/infraestructure/RoomController.java
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,12 +16,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "rooms")
-<<<<<<< HEAD:src/main/java/cl/ucn/codecrafters/controllers/RoomController.java
-//@Secured({"ADMINISTRATIVE"})
-public class RoomController implements IBaseController<Room, Integer>{
-=======
 public class RoomController implements IBaseController<Room, Integer> {
->>>>>>> 7bbfaca4a411ff62d3aa8e522016b9a6ea1c26a7:src/main/java/cl/ucn/codecrafters/room/infraestructure/RoomController.java
 
     @Autowired
     protected IRoomService roomService;

@@ -1,14 +1,12 @@
 package cl.ucn.codecrafters.reserve.infraestructure;
 
-<<<<<<< HEAD:src/main/java/cl/ucn/codecrafters/controllers/ReserveController.java
-import cl.ucn.codecrafters.entities.Reserve;
-import cl.ucn.codecrafters.entities.errors.ReserveError;
-import cl.ucn.codecrafters.services.interfaces.IReserveService;
-=======
+
+
+import cl.ucn.codecrafters.reserve.domain.ReserveError;
 import cl.ucn.codecrafters.reserve.application.IReserveService;
+
 import cl.ucn.codecrafters.reserve.domain.Reserve;
 import cl.ucn.codecrafters.utils.IBaseController;
->>>>>>> 7bbfaca4a411ff62d3aa8e522016b9a6ea1c26a7:src/main/java/cl/ucn/codecrafters/reserve/infraestructure/ReserveController.java
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
