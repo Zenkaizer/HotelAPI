@@ -50,12 +50,12 @@ public class SecurityConfig{
                     .requestMatchers(PUT, "/administratives/**").hasAuthority(ADMIN_UPDATE.name())
                     .requestMatchers(DELETE, "/administratives/**").hasAuthority(ADMIN_DELETE.name())
 
-                    .requestMatchers("/reserves/**").hasRole(CLIENT.name())
+                    .requestMatchers("/reserves/**").hasAnyRole(CLIENT.name(),ADMINISTRATIVE.name())
 
                     .requestMatchers(GET, "/reserves/**").hasAuthority(CLIENT_READ.name())
                     .requestMatchers(POST, "/reserves/**").hasAuthority(CLIENT_CREATE.name())
                     .requestMatchers(PUT, "/reserves/**").hasAuthority(CLIENT_UPDATE.name())
-                    .requestMatchers(DELETE, "/reserves/**").hasAuthority(CLIENT_DELETE.name())
+                    .requestMatchers(DELETE, "/reserves/**").hasAnyAuthority(CLIENT_DELETE.name(), ADMINISTRATIVE_DELETE.name())
 
                         .requestMatchers("/rooms/**").hasAnyRole(CLIENT.name(),ADMINISTRATIVE.name(),ADMIN.name())
 

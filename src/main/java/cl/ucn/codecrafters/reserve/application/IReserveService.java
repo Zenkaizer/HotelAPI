@@ -2,6 +2,7 @@ package cl.ucn.codecrafters.reserve.application;
 
 
 import cl.ucn.codecrafters.reserve.domain.Reserve;
+import cl.ucn.codecrafters.reserve.domain.ReserveDto;
 import cl.ucn.codecrafters.reserve.domain.ReserveError;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public interface IReserveService{
      * @return The saved entity.
      * @throws Exception Exception.
      */
-    Reserve save(Reserve entity) throws Exception;
+    Reserve save(ReserveDto entity) throws Exception;
 
     /**
      * Method responsible for updating an entity in the database.
@@ -38,7 +39,7 @@ public interface IReserveService{
      * @return The updated entity.
      * @throws Exception Exception.
      */
-    Reserve update(Integer id, Reserve entity) throws Exception;
+    Reserve update(Integer id, ReserveDto entity) throws Exception;
 
     /**
      * Method responsible for removing an entity from the database.
@@ -49,7 +50,7 @@ public interface IReserveService{
     boolean delete(Integer id) throws Exception;
 
 
-    ReserveError validateReserveErrors(Reserve reserve);
+    ReserveError validateReserveErrors(ReserveDto reserve);
 
 
 

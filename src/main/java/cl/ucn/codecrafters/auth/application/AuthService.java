@@ -43,6 +43,9 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(jwtToken)
+                .userName(user.getEmail())
+                .role(user.getRole().name())
+                .userId(user.getDni())
                 .build();
     }
 
@@ -71,9 +74,10 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(jwtToken)
+                .userName(user.getEmail())
+                .role(user.getRole().name())
+                .userId(user.getDni())
                 .build();
-
-
     }
 
     private void revokeAllUserTokens(User user){

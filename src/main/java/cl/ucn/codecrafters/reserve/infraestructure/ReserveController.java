@@ -1,23 +1,19 @@
 package cl.ucn.codecrafters.reserve.infraestructure;
 
-
-
+import cl.ucn.codecrafters.reserve.domain.ReserveDto;
 import cl.ucn.codecrafters.reserve.domain.ReserveError;
 import cl.ucn.codecrafters.reserve.application.IReserveService;
-
-import cl.ucn.codecrafters.reserve.domain.Reserve;
 import cl.ucn.codecrafters.utils.IBaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "reserves")
-public class ReserveController implements IBaseController<Reserve, Integer> {
+public class ReserveController implements IBaseController<ReserveDto, Integer> {
 
     @Autowired
     private IReserveService reserveService;
@@ -52,9 +48,8 @@ public class ReserveController implements IBaseController<Reserve, Integer> {
         }
     }
 
-    @Override
     @PostMapping("")
-    public ResponseEntity<?> save(@RequestBody Reserve entity) {
+    public ResponseEntity<?> save(@RequestBody ReserveDto entity) {
         try {
 
             ReserveError reserveError= this.reserveService.validateReserveErrors(entity);
@@ -71,9 +66,8 @@ public class ReserveController implements IBaseController<Reserve, Integer> {
         }
     }
 
-    @Override
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id,@RequestBody Reserve entity) {
+    public ResponseEntity<?> update(@PathVariable Integer id,@RequestBody ReserveDto entity) {
         try {
             ReserveError reserveError = this.reserveService.validateReserveErrors(entity);
 

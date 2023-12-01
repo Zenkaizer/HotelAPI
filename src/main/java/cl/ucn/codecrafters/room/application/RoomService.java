@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static org.apache.tomcat.util.http.parser.HttpParser.isNumeric;
+
 @Service
 @AllArgsConstructor
 @NoArgsConstructor
@@ -135,7 +137,7 @@ public class RoomService implements IRoomService {
             isValid = Boolean.FALSE;
         }
 
-        if(!(room.getMaxCapacity() instanceof Integer)){
+        if(isNumeric(room.getMaxCapacity())){
             roomErrors.setInvalidMaxCapacityError("La capacidad máxima de la habitación debe ser numérica");
             isValid = Boolean.FALSE;
         }
@@ -150,17 +152,19 @@ public class RoomService implements IRoomService {
 
         if(!(room.getPrice() instanceof Integer)){
             roomErrors.setInvalidPriceError("El precio de la habitacion debe ser numérico");
+            isValid = Boolean.FALSE;
         }
-
 
         //Beds amount validations
 
-        if(room.getDualBeds() < 0 || room.getIndividualBeds() < 0){
+        if((room.getDualBeds() <= 0 && room.getIndividualBeds() <= 0) || room.getDualBeds() < 0 || room.getIndividualBeds() < 0){
             roomErrors.setNegativeBedAmountError("La cantidad de camas no pueden ser menor a 0");
+            isValid = Boolean.FALSE;
         }
 
         if(!(room.getDualBeds() instanceof Integer) || !(room.getIndividualBeds() instanceof Integer)){
             roomErrors.setInvalidBedAmountError("La cantidad de camas debe ser numérica");
+            isValid = Boolean.FALSE;
         }
 
         roomErrors.setIsValid(isValid);

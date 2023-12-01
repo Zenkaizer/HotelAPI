@@ -1,5 +1,6 @@
 package cl.ucn.codecrafters.room.domain;
 
+import cl.ucn.codecrafters.utils.Base;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
