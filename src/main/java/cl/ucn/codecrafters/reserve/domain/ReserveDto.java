@@ -16,7 +16,7 @@ public class ReserveDto extends Base {
 
     private Integer roomNumber;
 
-    private String userDni;
+    private Integer userDni;
 
     private String firstName;
 

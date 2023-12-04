@@ -4,14 +4,16 @@ import cl.ucn.codecrafters.reserve.domain.ReserveDto;
 import cl.ucn.codecrafters.reserve.domain.ReserveError;
 import cl.ucn.codecrafters.reserve.domain.IReserveRepository;
 import cl.ucn.codecrafters.reserve.domain.Reserve;
-import cl.ucn.codecrafters.room.domain.IRoomRepository;
-import cl.ucn.codecrafters.user.domain.IUserRepository;
+import cl.ucn.codecrafters.room.application.IRoomService;
+import cl.ucn.codecrafters.room.domain.Room;
+import cl.ucn.codecrafters.user.application.IUserService;
+import cl.ucn.codecrafters.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,26 +24,26 @@ public class ReserveService implements IReserveService {
 
     @Autowired
     private IReserveRepository reserveRepository;
-    private IUserRepository userRepository;
-    private IRoomRepository roomRepository;
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private IRoomService roomService;
 
     /**
      * Method responsible for listing all reserves.
      *
      * @return All corresponding reserves in a list.
-     * @throws Exception Exception.
      */
     @Override
-    public List<Reserve> findAll() throws Exception {
+    public List<Reserve> findAll(){
 
         List<Reserve> reserveList = this.reserveRepository.findAll();
 
         if(reserveList.isEmpty()){
-            throw new Exception("No existen reservas en sistema");
+           return new ArrayList<>();
         }
-
-        //FIXME: Utilizar el metodo sort con menor complejidad
-        reserveList.stream().sorted(Comparator.comparing(Reserve::getReserveDateTime));
 
         return reserveList;
     }
@@ -78,11 +80,15 @@ public class ReserveService implements IReserveService {
             Reserve reserve = new Reserve();
             LocalDateTime dateTime = LocalDateTime.now();
 
-            reserve.setUser(userRepository.findById(Integer.parseInt(entity.getUserDni())).get());
-            reserve.setRoom(roomRepository.findById(entity.getRoomNumber()).get());
+            User user = userService.findUserById(entity.getUserDni());
+            Room room = roomService.findById(entity.getRoomNumber());
+
+            reserve.setUser(user);
+            reserve.setRoom(room);
             reserve.setReserveDateTime(dateTime);
             reserve.setArriveDateTime(entity.getArriveDateTime());
             reserve.setLeaveDateTime(entity.getLeaveDateTime());
+            reserve.setConfirmed(entity.getConfirmed());
 
             reserve = this.reserveRepository.save(reserve);
             return reserve;
@@ -109,11 +115,12 @@ public class ReserveService implements IReserveService {
             LocalDateTime dateTime = LocalDateTime.now();
             Reserve reserve = new Reserve();
 
-            reserve.setUser(userRepository.findById(Integer.parseInt(entity.getUserDni())).get());
-            reserve.setRoom(roomRepository.findById(entity.getRoomNumber()).get());
+            reserve.setUser(userService.findUserById(entity.getUserDni()));
+            reserve.setRoom(roomService.findById(entity.getRoomNumber()));
             reserve.setReserveDateTime(dateTime);
             reserve.setArriveDateTime(entity.getArriveDateTime());
             reserve.setLeaveDateTime(entity.getLeaveDateTime());
+            reserve.setConfirmed(entity.getConfirmed());
             entityUpdate = this.reserveRepository.save(reserve);
             return entityUpdate;
         }

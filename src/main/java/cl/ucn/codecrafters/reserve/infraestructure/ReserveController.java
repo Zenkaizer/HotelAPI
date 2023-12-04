@@ -1,5 +1,6 @@
 package cl.ucn.codecrafters.reserve.infraestructure;
 
+import cl.ucn.codecrafters.reserve.domain.Reserve;
 import cl.ucn.codecrafters.reserve.domain.ReserveDto;
 import cl.ucn.codecrafters.reserve.domain.ReserveError;
 import cl.ucn.codecrafters.reserve.application.IReserveService;
@@ -8,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -16,10 +20,10 @@ import java.util.List;
 public class ReserveController implements IBaseController<ReserveDto, Integer> {
 
     @Autowired
-    private IReserveService reserveService;
+    protected IReserveService reserveService;
 
     @Override
-    @GetMapping()
+    @GetMapping("")
     public ResponseEntity<?> getAll() {
         try {
             List<?> reserveList = this.reserveService.findAll();
@@ -55,7 +59,7 @@ public class ReserveController implements IBaseController<ReserveDto, Integer> {
             ReserveError reserveError= this.reserveService.validateReserveErrors(entity);
 
             if(reserveError.getIsValid()){
-                return ResponseEntity.status(HttpStatus.OK).body(this.reserveService.save(entity));
+                return ResponseEntity.status(HttpStatus.CREATED).body(this.reserveService.save(entity));
             }
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(reserveError);
