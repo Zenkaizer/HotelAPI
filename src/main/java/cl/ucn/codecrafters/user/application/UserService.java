@@ -60,6 +60,7 @@ public class UserService implements IUserService {
 
             ClientDto clientDto = new ClientDto();
 
+            clientDto.setId(user.getId());
             clientDto.setDni(user.getDni());
             clientDto.setFirstName(user.getFirstName());
             clientDto.setLastName(user.getLastName());
@@ -135,6 +136,7 @@ public class UserService implements IUserService {
 
             ClientDto clientDto = new ClientDto();
 
+            clientDto.setId(userProvided.getId());
             clientDto.setDni(userProvided.getDni());
             clientDto.setFirstName(userProvided.getFirstName());
             clientDto.setLastName(userProvided.getLastName());

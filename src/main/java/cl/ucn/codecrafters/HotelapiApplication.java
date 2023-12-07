@@ -23,7 +23,8 @@ public class HotelapiApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/**")
+						.allowedOrigins("http://localhost:4200");
 			}
 		};
 	}
@@ -39,7 +40,7 @@ public class HotelapiApplication {
 					.password("password")
 					.firstName("Marcelo")
 					.lastName("Cespedes")
-					.phone("977404965")
+					.phone("77404965")
 					.nationality("Chile")
 					.birthDate(new Date())
 					.build();
@@ -52,7 +53,7 @@ public class HotelapiApplication {
 					.password("password")
 					.firstName("Jorge")
 					.lastName("Rivera")
-					.phone("123456789")
+					.phone("23456789")
 					.nationality("Chile")
 					.birthDate(new Date())
 					.build();
@@ -65,7 +66,7 @@ public class HotelapiApplication {
 					.password("password")
 					.firstName("David")
 					.lastName("Araya")
-					.phone("987654321")
+					.phone("87654321")
 					.nationality("Chile")
 					.birthDate(new Date())
 					.build();

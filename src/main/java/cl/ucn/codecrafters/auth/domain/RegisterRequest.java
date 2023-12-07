@@ -17,8 +17,6 @@ public class RegisterRequest {
 
     private String email;
 
-    private String password;
-
     private String firstName;
 
     private String lastName;
@@ -28,5 +26,9 @@ public class RegisterRequest {
     private String nationality;
 
     private Date birthDate;
+
+    private String password;
+
+    private String repeatPassword;
 
 }

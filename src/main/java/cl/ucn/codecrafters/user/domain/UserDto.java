@@ -9,6 +9,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class UserDto {
 
+    private Integer id;
     private String dni;
     private String firstName;
     private String lastName;
