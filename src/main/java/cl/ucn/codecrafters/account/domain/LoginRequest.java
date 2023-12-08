@@ -1,4 +1,4 @@
-package cl.ucn.codecrafters.auth.domain;
+package cl.ucn.codecrafters.account.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthRequest {
+public class LoginRequest {
 
     private String email;
     private String password;

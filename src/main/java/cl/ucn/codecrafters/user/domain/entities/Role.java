@@ -1,4 +1,4 @@
-package cl.ucn.codecrafters.user.domain;
+package cl.ucn.codecrafters.user.domain.entities;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static cl.ucn.codecrafters.user.domain.Permission.*;
+import static cl.ucn.codecrafters.user.domain.entities.Permission.*;
 
 @RequiredArgsConstructor
 public enum Role{

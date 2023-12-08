@@ -1,11 +1,13 @@
 package cl.ucn.codecrafters;
 
-import cl.ucn.codecrafters.user.domain.User;
+import cl.ucn.codecrafters.user.domain.entities.Role;
+import cl.ucn.codecrafters.user.domain.entities.User;
 import cl.ucn.codecrafters.user.application.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -30,45 +32,46 @@ public class HotelapiApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(UserService userService){
+	public CommandLineRunner commandLineRunner(UserService userService, PasswordEncoder passwordEncoder){
 
 		return args -> {
 
 			var admin = User.builder()
-					.dni("207236683")
+					.dni("20723668-3")
 					.email("marcelo.cespedes@alumnos.ucn.cl")
 					.password("password")
 					.firstName("Marcelo")
 					.lastName("Cespedes")
 					.phone("77404965")
-					.nationality("Chile")
+					.nationality("Chilena")
 					.birthDate(new Date())
 					.build();
 
 			userService.saveAdmin(admin);
 
 			var administrative = User.builder()
-					.dni("204166994")
+					.dni("20416699-4")
 					.email("jorge.rivera01@alumnos.ucn.cl")
 					.password("password")
 					.firstName("Jorge")
 					.lastName("Rivera")
 					.phone("23456789")
-					.nationality("Chile")
+					.nationality("Chilena")
 					.birthDate(new Date())
 					.build();
 
 			userService.saveAdministrative(administrative);
 
 			var client = User.builder()
-					.dni("207676918")
+					.dni("20767691-8")
 					.email("david.araya@alumnos.ucn.cl")
-					.password("password")
+					.password(passwordEncoder.encode("password"))
 					.firstName("David")
 					.lastName("Araya")
 					.phone("87654321")
-					.nationality("Chile")
+					.nationality("Chilena")
 					.birthDate(new Date())
+					.role(Role.CLIENT)
 					.build();
 
 			userService.saveClient(client);

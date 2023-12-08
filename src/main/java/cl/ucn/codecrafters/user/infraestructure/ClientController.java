@@ -1,15 +1,19 @@
 package cl.ucn.codecrafters.user.infraestructure;
 
 import cl.ucn.codecrafters.user.application.IUserService;
-import cl.ucn.codecrafters.user.domain.User;
+import cl.ucn.codecrafters.user.domain.entities.Role;
+import cl.ucn.codecrafters.user.domain.entities.User;
 import cl.ucn.codecrafters.user.domain.UserError;
-import cl.ucn.codecrafters.user.domain.ClientDto;
+import cl.ucn.codecrafters.user.domain.dtos.ClientDto;
+import cl.ucn.codecrafters.user.domain.dtos.CreateClientDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -18,6 +22,8 @@ public class ClientController {
 
     @Autowired
     protected IUserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * This method returns all clients for the system.
@@ -59,17 +65,35 @@ public class ClientController {
         }
     }
 
-    @PostMapping("")
-    public ResponseEntity<?> save(@Valid @RequestBody User entity) {
+    @PostMapping("/new-client")
+    public ResponseEntity<?> createNewClient(@Valid @RequestBody CreateClientDto createClient) {
         try {
 
-            UserError userError = this.userService.validateUserErrors(entity);
-
-            if (userError.getIsValid()){
-                return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.saveClient(entity));
+            if (this.userService.userEmailExists(createClient.getEmail())){
+                return ResponseEntity.badRequest().body("El correo electrónico ya existe.");
             }
 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userError);
+            if (createClient.getBirthDate().compareTo(new Date()) > 0){
+                return ResponseEntity.badRequest().body("La fecha de nacimiento no puede ser después de hoy.");
+            }
+
+
+            User user = new User();
+
+            user.setDni(createClient.getDni());
+            user.setEmail(createClient.getEmail());
+            // Remove the - character for no spaces.
+            user.setPassword(passwordEncoder.encode(createClient.getDni().replace("-", "")));
+            user.setFirstName(createClient.getFirstName());
+            user.setLastName(createClient.getLastName());
+            user.setPhone(createClient.getPhone());
+            user.setNationality(createClient.getNationality());
+            user.setBirthDate(createClient.getBirthDate());
+            user.setRole(Role.CLIENT);
+
+            this.userService.saveClient(user);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado exitosamete");
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -78,7 +102,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody User entity) {
+    public ResponseEntity<?> updateClient(@PathVariable Integer id, @RequestBody User entity) {
         try {
             UserError userError = this.userService.validateUserErrors(entity);
 

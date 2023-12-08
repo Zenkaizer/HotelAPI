@@ -1,7 +1,7 @@
-package cl.ucn.codecrafters.user.domain;
+package cl.ucn.codecrafters.user.domain.repositories;
 
-import cl.ucn.codecrafters.user.domain.Role;
-import cl.ucn.codecrafters.user.domain.User;
+import cl.ucn.codecrafters.user.domain.entities.Role;
+import cl.ucn.codecrafters.user.domain.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

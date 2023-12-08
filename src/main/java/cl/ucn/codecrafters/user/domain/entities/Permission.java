@@ -1,4 +1,4 @@
-package cl.ucn.codecrafters.user.domain;
+package cl.ucn.codecrafters.user.domain.entities;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

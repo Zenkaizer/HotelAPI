@@ -1,8 +1,8 @@
 package cl.ucn.codecrafters.user.infraestructure;
 import cl.ucn.codecrafters.user.application.IUserService;
-import cl.ucn.codecrafters.user.domain.User;
+import cl.ucn.codecrafters.user.domain.entities.User;
 import cl.ucn.codecrafters.user.domain.UserError;
-import cl.ucn.codecrafters.user.domain.AdministrativeDto;
+import cl.ucn.codecrafters.user.domain.dtos.AdministrativeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

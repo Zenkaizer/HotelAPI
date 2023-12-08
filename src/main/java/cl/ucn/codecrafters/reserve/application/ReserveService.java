@@ -7,7 +7,7 @@ import cl.ucn.codecrafters.reserve.domain.Reserve;
 import cl.ucn.codecrafters.room.application.IRoomService;
 import cl.ucn.codecrafters.room.domain.Room;
 import cl.ucn.codecrafters.user.application.IUserService;
-import cl.ucn.codecrafters.user.domain.User;
+import cl.ucn.codecrafters.user.domain.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,12 @@
 package cl.ucn.codecrafters.user.application;
 
 import cl.ucn.codecrafters.user.domain.UserError;
-import cl.ucn.codecrafters.user.domain.*;
+import cl.ucn.codecrafters.user.domain.dtos.AdministrativeDto;
+import cl.ucn.codecrafters.user.domain.dtos.ClientDto;
+import cl.ucn.codecrafters.user.domain.dtos.UserDto;
+import cl.ucn.codecrafters.user.domain.entities.Role;
+import cl.ucn.codecrafters.user.domain.entities.User;
+import cl.ucn.codecrafters.user.domain.repositories.IUserRepository;
 import cl.ucn.codecrafters.utils.Validation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -227,10 +232,6 @@ public class UserService implements IUserService {
     public User saveClient(User entity) throws Exception {
         try {
 
-            // Password encode and role assignation.
-            entity.setPassword(this.passwordEncoder.encode(entity.getPassword()));
-            entity.setRole(Role.CLIENT);
-
             entity = this.userRepository.save(entity);
             return entity;
         }
@@ -283,6 +284,11 @@ public class UserService implements IUserService {
         catch (Exception e){
             throw new Exception(e.getMessage());
         }
+    }
+
+    @Override
+    public Boolean userEmailExists(String email) {
+        return this.userRepository.existsUserByEmail(email);
     }
 
     /**

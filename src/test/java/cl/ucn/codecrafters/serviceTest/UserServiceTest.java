@@ -1,11 +1,11 @@
 package cl.ucn.codecrafters.serviceTest;
 
 
-import cl.ucn.codecrafters.user.domain.Role;
-import cl.ucn.codecrafters.user.domain.User;
-import cl.ucn.codecrafters.user.domain.AdministrativeDto;
-import cl.ucn.codecrafters.user.domain.ClientDto;
-import cl.ucn.codecrafters.user.domain.IUserRepository;
+import cl.ucn.codecrafters.user.domain.entities.Role;
+import cl.ucn.codecrafters.user.domain.entities.User;
+import cl.ucn.codecrafters.user.domain.dtos.AdministrativeDto;
+import cl.ucn.codecrafters.user.domain.dtos.ClientDto;
+import cl.ucn.codecrafters.user.domain.repositories.IUserRepository;
 import cl.ucn.codecrafters.user.application.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package cl.ucn.codecrafters.auth.domain;
+package cl.ucn.codecrafters.account.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

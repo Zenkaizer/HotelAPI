@@ -1,4 +1,4 @@
-package cl.ucn.codecrafters.auth.application;
+package cl.ucn.codecrafters.account.application;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

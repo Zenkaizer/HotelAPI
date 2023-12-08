@@ -1,7 +1,7 @@
 package cl.ucn.codecrafters.reserve.domain;
 
 import cl.ucn.codecrafters.room.domain.Room;
-import cl.ucn.codecrafters.user.domain.User;
+import cl.ucn.codecrafters.user.domain.entities.User;
 import cl.ucn.codecrafters.utils.Base;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

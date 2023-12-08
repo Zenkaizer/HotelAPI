@@ -1,4 +1,4 @@
-package cl.ucn.codecrafters.user.domain;
+package cl.ucn.codecrafters.user.domain.dtos;
 import lombok.*;
 
 import java.util.Date;

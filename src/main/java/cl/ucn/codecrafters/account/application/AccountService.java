@@ -1,24 +1,26 @@
-package cl.ucn.codecrafters.auth.application;
+package cl.ucn.codecrafters.account.application;
 
-import cl.ucn.codecrafters.auth.domain.AuthRequest;
-import cl.ucn.codecrafters.auth.domain.AuthResponse;
-import cl.ucn.codecrafters.auth.domain.RegisterRequest;
+import cl.ucn.codecrafters.account.domain.LoginRequest;
+import cl.ucn.codecrafters.account.domain.AuthResponse;
+import cl.ucn.codecrafters.account.domain.RegisterRequest;
+import cl.ucn.codecrafters.account.domain.UpdateRequest;
 import cl.ucn.codecrafters.token.Token;
 import cl.ucn.codecrafters.token.ITokenRepository;
 import cl.ucn.codecrafters.token.TokenType;
-import cl.ucn.codecrafters.user.domain.Role;
-import cl.ucn.codecrafters.user.domain.User;
-import cl.ucn.codecrafters.user.domain.IUserRepository;
+import cl.ucn.codecrafters.user.domain.entities.Role;
+import cl.ucn.codecrafters.user.domain.entities.User;
+import cl.ucn.codecrafters.user.domain.repositories.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AccountService {
 
     private final IUserRepository userRepository;
     private final ITokenRepository tokenRepository;
@@ -26,14 +28,20 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponse login(AuthRequest request) {
+    public AuthResponse login(LoginRequest request) throws AuthenticationException {
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+        try{
+
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+
+        }catch (AuthenticationException ex){
+            throw ex;
+        }
 
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = this.jwtService.generateToken(user);
@@ -78,6 +86,37 @@ public class AuthService {
                 .build();
     }
 
+    /**
+     * Method that
+     * @param request
+     * @return
+     */
+    public AuthResponse updateUser(UpdateRequest request) {
+
+        var user = this.userRepository.findByEmail(request.getActualEmail()).orElseThrow();
+
+        if (!request.getActualEmail().equals(request.getEmail())){
+            user.setEmail(request.getEmail());
+        }
+
+        user.setPassword(this.passwordEncoder.encode(request.getPassword()));
+        var updatedUser = this.userRepository.save(user);
+        var jwtToken = this.jwtService.generateToken(updatedUser);
+
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
+
+        return AuthResponse.builder()
+                .token(jwtToken)
+                .email(user.getEmail())
+                .role(user.getRole().name())
+                .build();
+    }
+
+    /**
+     * This method revoke all user's tokens.
+     * @param user User to remove tokens.
+     */
     private void revokeAllUserTokens(User user){
 
         var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
@@ -95,6 +134,11 @@ public class AuthService {
 
     }
 
+    /**
+     * This method save the user token.
+     * @param user User to save the token.
+     * @param jwtToken JWT to save.
+     */
     private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
                 .user(user)

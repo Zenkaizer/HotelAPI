@@ -1,4 +1,4 @@
-package cl.ucn.codecrafters.user.domain;
+package cl.ucn.codecrafters.user.domain.entities;
 
 import cl.ucn.codecrafters.utils.Base;
 import cl.ucn.codecrafters.token.Token;

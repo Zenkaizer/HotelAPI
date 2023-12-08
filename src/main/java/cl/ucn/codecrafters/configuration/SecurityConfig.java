@@ -12,8 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static cl.ucn.codecrafters.user.domain.Permission.*;
-import static cl.ucn.codecrafters.user.domain.Role.*;
+import static cl.ucn.codecrafters.user.domain.entities.Permission.*;
+import static cl.ucn.codecrafters.user.domain.entities.Role.*;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration

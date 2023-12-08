@@ -1,6 +1,6 @@
 package cl.ucn.codecrafters.configuration;
 
-import cl.ucn.codecrafters.auth.application.JwtService;
+import cl.ucn.codecrafters.account.application.JwtService;
 import cl.ucn.codecrafters.token.ITokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

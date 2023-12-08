@@ -1,8 +1,8 @@
 package cl.ucn.codecrafters.controllerTest;
 
 import cl.ucn.codecrafters.user.infraestructure.ClientController;
-import cl.ucn.codecrafters.user.domain.User;
-import cl.ucn.codecrafters.user.domain.ClientDto;
+import cl.ucn.codecrafters.user.domain.entities.User;
+import cl.ucn.codecrafters.user.domain.dtos.ClientDto;
 import cl.ucn.codecrafters.user.domain.UserError;
 import cl.ucn.codecrafters.user.application.IUserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -94,7 +94,7 @@ class ClientControllerTest {
         when(userService.validateUserErrors(userToUpdate)).thenReturn(new UserError());
 
         // Llamando al controlador
-        ResponseEntity<?> responseEntity = clientController.update(userId, userToUpdate);
+        ResponseEntity<?> responseEntity = clientController.updateClient(userId, userToUpdate);
 
         // Verificando el resultado
         assertEquals(HttpStatus.BAD_REQUEST , responseEntity.getStatusCode());
