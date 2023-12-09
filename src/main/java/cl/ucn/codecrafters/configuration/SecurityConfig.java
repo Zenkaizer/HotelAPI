@@ -52,17 +52,17 @@ public class SecurityConfig{
 
                     .requestMatchers("/reserves/**").hasAnyRole(CLIENT.name(),ADMINISTRATIVE.name())
 
-                    .requestMatchers(GET, "/reserves/**").hasAuthority(CLIENT_READ.name())
-                    .requestMatchers(POST, "/reserves/**").hasAuthority(CLIENT_CREATE.name())
-                    .requestMatchers(PUT, "/reserves/**").hasAuthority(CLIENT_UPDATE.name())
+                    .requestMatchers(GET, "/reserves/**").hasAnyAuthority(CLIENT_DELETE.name(), ADMINISTRATIVE_DELETE.name())
+                    .requestMatchers(POST, "/reserves/**").hasAuthority(CLIENT_DELETE.name())
+                    .requestMatchers(PUT, "/reserves/**").hasAnyAuthority(CLIENT_DELETE.name(), ADMINISTRATIVE_DELETE.name())
                     .requestMatchers(DELETE, "/reserves/**").hasAnyAuthority(CLIENT_DELETE.name(), ADMINISTRATIVE_DELETE.name())
 
-                        .requestMatchers("/rooms/**").hasAnyRole(CLIENT.name(),ADMINISTRATIVE.name(),ADMIN.name())
+                    .requestMatchers("/rooms/**").hasAnyRole(CLIENT.name(),ADMINISTRATIVE.name(),ADMIN.name())
 
-                        .requestMatchers(GET,"/rooms/**").hasAnyAuthority(CLIENT_READ.name())
-                        .requestMatchers(POST,"/rooms/**").hasAnyAuthority(ADMINISTRATIVE_CREATE.name(), ADMIN_CREATE.name())
-                        .requestMatchers(PUT,"/rooms/¨**").hasAnyAuthority(ADMINISTRATIVE_UPDATE.name(), ADMIN_UPDATE.name())
-                        .requestMatchers(DELETE,"/rooms/**").hasAnyAuthority(ADMIN_DELETE.name(),ADMINISTRATIVE_DELETE.name())
+                    .requestMatchers(GET,"/rooms/**").hasAnyAuthority(CLIENT_READ.name())
+                    .requestMatchers(POST,"/rooms/**").hasAnyAuthority(ADMINISTRATIVE_CREATE.name(), ADMIN_CREATE.name())
+                    .requestMatchers(PUT,"/rooms/¨**").hasAnyAuthority(ADMINISTRATIVE_UPDATE.name(), ADMIN_UPDATE.name())
+                    .requestMatchers(DELETE,"/rooms/**").hasAnyAuthority(ADMIN_DELETE.name(),ADMINISTRATIVE_DELETE.name())
 
                     .anyRequest().authenticated()
             )

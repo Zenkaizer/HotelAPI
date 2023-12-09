@@ -36,14 +36,14 @@ public class ClientController {
             List<?> clientList = this.userService.findAllClients();
 
             if (clientList.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.OK).body("{\"error\":\"No hay clientes para mostrar.\"}");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No hay clientes para mostrar.");
             }
 
             return ResponseEntity.status(HttpStatus.OK).body(clientList);
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("{\"error\":\"Error, por favor intente más tarde.\"}");
+                    .body("Error, por favor intente más tarde.");
         }
     }
 

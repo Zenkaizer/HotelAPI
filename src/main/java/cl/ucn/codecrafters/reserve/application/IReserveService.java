@@ -4,6 +4,7 @@ package cl.ucn.codecrafters.reserve.application;
 import cl.ucn.codecrafters.reserve.domain.Reserve;
 import cl.ucn.codecrafters.reserve.domain.ReserveDto;
 import cl.ucn.codecrafters.reserve.domain.ReserveError;
+import cl.ucn.codecrafters.reserve.domain.dtos.ReadReserveDto;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface IReserveService{
      * @return All corresponding entities in a list.
      * @throws Exception Exception.
      */
-    List<Reserve> findAll() throws Exception;
+    List<ReadReserveDto> readAllReserves() throws Exception;
 
     /**
      * Method in charge of finding an entity according to its ID.

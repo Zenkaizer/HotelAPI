@@ -4,6 +4,7 @@ import cl.ucn.codecrafters.reserve.domain.ReserveDto;
 import cl.ucn.codecrafters.reserve.domain.ReserveError;
 import cl.ucn.codecrafters.reserve.domain.IReserveRepository;
 import cl.ucn.codecrafters.reserve.domain.Reserve;
+import cl.ucn.codecrafters.reserve.domain.dtos.ReadReserveDto;
 import cl.ucn.codecrafters.room.application.IRoomService;
 import cl.ucn.codecrafters.room.domain.Room;
 import cl.ucn.codecrafters.user.application.IUserService;
@@ -33,19 +34,35 @@ public class ReserveService implements IReserveService {
 
     /**
      * Method responsible for listing all reserves.
-     *
      * @return All corresponding reserves in a list.
      */
     @Override
-    public List<Reserve> findAll(){
+    public List<ReadReserveDto> readAllReserves(){
 
         List<Reserve> reserveList = this.reserveRepository.findAll();
 
-        if(reserveList.isEmpty()){
-           return new ArrayList<>();
+        List<ReadReserveDto> reserveDtoList = new ArrayList<>();
+
+        for (Reserve reserve : reserveList) {
+
+            ReadReserveDto readReserveDto = new ReadReserveDto();
+
+            readReserveDto.setRoomId(reserve.getRoom().getId());
+            readReserveDto.setClientRut(reserve.getUser().getDni());
+            readReserveDto.setFirstName(reserve.getUser().getFirstName());
+            readReserveDto.setLastName(reserve.getUser().getLastName());
+            readReserveDto.setCheckIn(reserve.getArriveDateTime().toString());
+            readReserveDto.setCheckOut(reserve.getLeaveDateTime().toString());
+            readReserveDto.setConfirmed(reserve.getConfirmed());
+
+            reserveDtoList.add(readReserveDto);
         }
 
-        return reserveList;
+        if(reserveList.isEmpty()){
+           return null;
+        }
+
+        return reserveDtoList;
     }
 
     /**
@@ -198,7 +215,7 @@ public class ReserveService implements IReserveService {
         //Room validations
 
         try {
-            List<Reserve> reserveList = this.findAll();
+            List<Reserve> reserveList = this.reserveRepository.findAll();
 
             for (Reserve r:reserveList) {
 

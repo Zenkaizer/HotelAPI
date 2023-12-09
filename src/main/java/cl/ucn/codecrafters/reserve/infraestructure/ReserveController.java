@@ -1,46 +1,41 @@
 package cl.ucn.codecrafters.reserve.infraestructure;
 
-import cl.ucn.codecrafters.reserve.domain.Reserve;
 import cl.ucn.codecrafters.reserve.domain.ReserveDto;
 import cl.ucn.codecrafters.reserve.domain.ReserveError;
 import cl.ucn.codecrafters.reserve.application.IReserveService;
-import cl.ucn.codecrafters.utils.IBaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "reserves")
-public class ReserveController implements IBaseController<ReserveDto, Integer> {
+public class ReserveController {
 
     @Autowired
     protected IReserveService reserveService;
 
-    @Override
     @GetMapping("")
     public ResponseEntity<?> getAll() {
         try {
-            List<?> reserveList = this.reserveService.findAll();
+            List<?> reserveList = this.reserveService.readAllReserves();
 
             if (reserveList.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.OK).body("{\"error\":\"No hay reservas por mostrar.\"}");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No hay reservas por mostrar.");
             }
 
             return ResponseEntity.status(HttpStatus.OK).body(reserveList);
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("{\"error\":\"Error, por favor intente más tarde.\"}");
+                    .body("Error, por favor intente más tarde.");
         }
     }
 
-    @Override
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable Integer id) {
         try {
@@ -87,7 +82,7 @@ public class ReserveController implements IBaseController<ReserveDto, Integer> {
         }
     }
 
-    @Override
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
