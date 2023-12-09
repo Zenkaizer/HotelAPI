@@ -124,49 +124,11 @@ public class UserService implements IUserService {
         }
     }
 
-    //TODO: ARREGLAR O SEPARARLOS.
     @Override
     public <E extends UserDto> E findUserDtoById(Integer id) {
-
-        Optional<User> user = this.userRepository.findById(id);
-
-        if (user.isEmpty()){
-            //TODO: Cambiar
-            System.out.println("[!] No existen usuarios en el sistema [!]");
-        }
-
-        User userProvided = user.get();
-
-        if (userProvided.getRole().equals(Role.CLIENT)){
-
-            ClientDto clientDto = new ClientDto();
-
-            clientDto.setId(userProvided.getId());
-            clientDto.setDni(userProvided.getDni());
-            clientDto.setFirstName(userProvided.getFirstName());
-            clientDto.setLastName(userProvided.getLastName());
-            clientDto.setNationality(userProvided.getNationality());
-            clientDto.setPhone(userProvided.getPhone());
-
-            return (E) clientDto;
-
-        }
-        if (userProvided.getRole().equals(Role.ADMINISTRATIVE)){
-
-            AdministrativeDto administrativeDto = new AdministrativeDto();
-
-            administrativeDto.setDni(userProvided.getDni());
-            administrativeDto.setFirstName(userProvided.getFirstName());
-            administrativeDto.setLastName(userProvided.getLastName());
-            administrativeDto.setNationality(userProvided.getNationality());
-            administrativeDto.setPhone(userProvided.getPhone());
-
-            return (E) administrativeDto;
-
-        }
-
         return null;
     }
+
 
     @Override
     public UserError validateUserErrors(User user) {
