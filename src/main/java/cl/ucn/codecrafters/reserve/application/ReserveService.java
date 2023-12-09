@@ -11,14 +11,19 @@ import cl.ucn.codecrafters.room.domain.Room;
 import cl.ucn.codecrafters.user.application.IUserService;
 import cl.ucn.codecrafters.user.domain.entities.User;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @AllArgsConstructor
@@ -45,18 +50,27 @@ public class ReserveService implements IReserveService {
 
         List<ReadReserveDto> reserveDtoList = new ArrayList<>();
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
         for (Reserve reserve : reserveList) {
 
             ReadReserveDto readReserveDto = new ReadReserveDto();
+
+            String checkIn = dateFormat.format(reserve.getArriveDateTime());
+            String checkOut = dateFormat.format(reserve.getLeaveDateTime());
 
             readReserveDto.setRoomId(reserve.getRoom().getId());
             readReserveDto.setClientRut(reserve.getUser().getDni());
             readReserveDto.setFirstName(reserve.getUser().getFirstName());
             readReserveDto.setLastName(reserve.getUser().getLastName());
-            readReserveDto.setCheckIn(reserve.getArriveDateTime().toString());
-            readReserveDto.setCheckOut(reserve.getLeaveDateTime().toString());
+            readReserveDto.setCheckIn(checkIn);
+            readReserveDto.setCheckOut(checkOut);
             readReserveDto.setConfirmed(reserve.getConfirmed());
 
+            int diffInMillies = Math.toIntExact(Math.abs(reserve.getArriveDateTime().getTime() - reserve.getLeaveDateTime().getTime()));
+            Integer diasEntreFechas = Math.toIntExact(TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS));
+
+            readReserveDto.setPrice(reserve.getRoom().getPrice() * diasEntreFechas);
             reserveDtoList.add(readReserveDto);
         }
 
@@ -94,6 +108,8 @@ public class ReserveService implements IReserveService {
      */
     @Override
     public Reserve save(ReserveDto entity) throws Exception {
+
+        /*
         try {
 
             Reserve reserve = new Reserve();
@@ -115,6 +131,9 @@ public class ReserveService implements IReserveService {
         catch (Exception e){
             throw new Exception(e.getMessage());
         }
+
+         */
+        return null;
     }
 
     /**
@@ -243,8 +262,6 @@ public class ReserveService implements IReserveService {
 
     @Override
     public void createReserve(CreateReserveDto entity) throws Exception {
-
-            LocalDateTime dateTime = LocalDateTime.now();
 
             Reserve reserve = new Reserve();
 
