@@ -1,6 +1,7 @@
 package cl.ucn.codecrafters.reserve.domain;
 
 
+import cl.ucn.codecrafters.utils.Base;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,11 +12,11 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReserveDto {
+public class ReserveDto extends Base {
 
     private Integer roomNumber;
 
-    private String userDni;
+    private Integer userDni;
 
     private String firstName;
 
@@ -24,6 +25,8 @@ public class ReserveDto {
     private LocalDateTime arriveDateTime;
 
     private LocalDateTime leaveDateTime;
+
+    private Integer price;
 
     private Boolean confirmed;
 

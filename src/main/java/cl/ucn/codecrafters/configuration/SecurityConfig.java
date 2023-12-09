@@ -12,8 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static cl.ucn.codecrafters.user.domain.Permission.*;
-import static cl.ucn.codecrafters.user.domain.Role.*;
+import static cl.ucn.codecrafters.user.domain.entities.Permission.*;
+import static cl.ucn.codecrafters.user.domain.entities.Role.*;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -50,12 +50,19 @@ public class SecurityConfig{
                     .requestMatchers(PUT, "/administratives/**").hasAuthority(ADMIN_UPDATE.name())
                     .requestMatchers(DELETE, "/administratives/**").hasAuthority(ADMIN_DELETE.name())
 
-                    .requestMatchers("/reserves/**").hasRole(CLIENT.name())
+                    .requestMatchers("/reserves/**").hasAnyRole(CLIENT.name(),ADMINISTRATIVE.name())
 
-                    .requestMatchers(GET, "/reserves/**").hasAuthority(CLIENT_READ.name())
-                    .requestMatchers(POST, "/reserves/**").hasAuthority(CLIENT_CREATE.name())
-                    .requestMatchers(PUT, "/reserves/**").hasAuthority(CLIENT_UPDATE.name())
-                    .requestMatchers(DELETE, "/reserves/**").hasAuthority(CLIENT_DELETE.name())
+                    .requestMatchers(GET, "/reserves/**").hasAnyAuthority(CLIENT_DELETE.name(), ADMINISTRATIVE_DELETE.name())
+                    .requestMatchers(POST, "/reserves/**").hasAuthority(CLIENT_DELETE.name())
+                    .requestMatchers(PUT, "/reserves/**").hasAnyAuthority(CLIENT_DELETE.name(), ADMINISTRATIVE_DELETE.name())
+                    .requestMatchers(DELETE, "/reserves/**").hasAnyAuthority(CLIENT_DELETE.name(), ADMINISTRATIVE_DELETE.name())
+
+                    .requestMatchers("/rooms/**").hasAnyRole(CLIENT.name(),ADMINISTRATIVE.name(),ADMIN.name())
+
+                    .requestMatchers(GET,"/rooms/**").hasAnyAuthority(CLIENT_READ.name())
+                    .requestMatchers(POST,"/rooms/**").hasAnyAuthority(ADMINISTRATIVE_CREATE.name(), ADMIN_CREATE.name())
+                    .requestMatchers(PUT,"/rooms/¨**").hasAnyAuthority(ADMINISTRATIVE_UPDATE.name(), ADMIN_UPDATE.name())
+                    .requestMatchers(DELETE,"/rooms/**").hasAnyAuthority(ADMIN_DELETE.name(),ADMINISTRATIVE_DELETE.name())
 
                     .anyRequest().authenticated()
             )

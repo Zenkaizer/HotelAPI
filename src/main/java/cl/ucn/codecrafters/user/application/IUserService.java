@@ -1,10 +1,10 @@
 package cl.ucn.codecrafters.user.application;
 
 import cl.ucn.codecrafters.user.domain.UserError;
-import cl.ucn.codecrafters.user.domain.AdministrativeDto;
-import cl.ucn.codecrafters.user.domain.ClientDto;
-import cl.ucn.codecrafters.user.domain.User;
-import cl.ucn.codecrafters.user.domain.UserDto;
+import cl.ucn.codecrafters.user.domain.dtos.AdministrativeDto;
+import cl.ucn.codecrafters.user.domain.dtos.ClientDto;
+import cl.ucn.codecrafters.user.domain.entities.User;
+import cl.ucn.codecrafters.user.domain.dtos.UserDto;
 
 import java.util.List;
 
@@ -32,6 +32,8 @@ public interface IUserService {
     User saveAdministrative(User entity) throws Exception;
 
     User saveAdmin(User entity) throws Exception;
+
+    Boolean userEmailExists(String email);
 
 
 }
