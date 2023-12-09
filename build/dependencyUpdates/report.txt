@@ -4,10 +4,16 @@
 ------------------------------------------------------------
 
 The following dependencies are using the latest milestone version:
- - com.github.javafaker:javafaker:1.0.2
  - com.palantir.docker:com.palantir.docker.gradle.plugin:0.35.0
  - org.hibernate.validator:hibernate-validator:8.0.1.Final
  - org.projectlombok:lombok:1.18.30
+ - org.springframework.boot:org.springframework.boot.gradle.plugin:3.2.0
+ - org.springframework.boot:spring-boot-starter-data-jpa:3.2.0
+ - org.springframework.boot:spring-boot-starter-data-rest:3.2.0
+ - org.springframework.boot:spring-boot-starter-security:3.2.0
+ - org.springframework.boot:spring-boot-starter-test:3.2.0
+ - org.springframework.boot:spring-boot-starter-web:3.2.0
+ - org.springframework.restdocs:spring-restdocs-mockmvc:3.0.1
 
 The following dependencies have later milestone versions:
  - com.github.ben-manes.versions:com.github.ben-manes.versions.gradle.plugin [0.49.0 -> 0.50.0]
@@ -30,22 +36,6 @@ The following dependencies have later milestone versions:
      https://junit.org/junit5/
  - org.mockito:mockito-junit-jupiter [3.12.4 -> 5.8.0]
      https://github.com/mockito/mockito
- - org.springframework.boot:org.springframework.boot.gradle.plugin [2.7.12 -> 3.2.0]
-     https://spring.io/projects/spring-boot
- - org.springframework.boot:spring-boot-starter-data-jpa [3.1.4 -> 3.2.0]
-     https://spring.io/projects/spring-boot
- - org.springframework.boot:spring-boot-starter-data-rest [3.1.4 -> 3.2.0]
-     https://spring.io/projects/spring-boot
- - org.springframework.boot:spring-boot-starter-security [3.1.4 -> 3.2.0]
-     https://spring.io/projects/spring-boot
- - org.springframework.boot:spring-boot-starter-test [3.1.4 -> 3.2.0]
-     https://spring.io/projects/spring-boot
- - org.springframework.boot:spring-boot-starter-web [3.1.4 -> 3.2.0]
-     https://spring.io/projects/spring-boot
- - org.springframework.restdocs:spring-restdocs-mockmvc [2.0.7.RELEASE -> 3.0.1]
-     https://github.com/spring-projects/spring-restdocs
- - org.yaml:snakeyaml [1.30 -> 2.2]
-     https://bitbucket.org/snakeyaml/snakeyaml
 
 Gradle release-candidate updates:
  - Gradle: [8.2.1 -> 8.5]
