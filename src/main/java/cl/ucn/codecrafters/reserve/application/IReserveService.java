@@ -4,6 +4,7 @@ package cl.ucn.codecrafters.reserve.application;
 import cl.ucn.codecrafters.reserve.domain.Reserve;
 import cl.ucn.codecrafters.reserve.domain.ReserveDto;
 import cl.ucn.codecrafters.reserve.domain.ReserveError;
+import cl.ucn.codecrafters.reserve.domain.dtos.CreateReserveDto;
 import cl.ucn.codecrafters.reserve.domain.dtos.ReadReserveDto;
 
 import java.util.List;
@@ -53,6 +54,6 @@ public interface IReserveService{
 
     ReserveError validateReserveErrors(ReserveDto reserve);
 
-
+    void createReserve(CreateReserveDto entity) throws Exception;
 
 }

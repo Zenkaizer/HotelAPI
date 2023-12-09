@@ -253,6 +253,14 @@ public class UserService implements IUserService {
         return this.userRepository.existsUserByEmail(email);
     }
 
+    @Override
+    public User findUserByEmail(String clientEmail) {
+
+        Optional<User> userOptional =  this.userRepository.findByEmail(clientEmail);
+
+        return userOptional.orElse(null);
+    }
+
     /**
      * Method responsible for updating an entity in the database.
      *
