@@ -4,6 +4,7 @@ import cl.ucn.codecrafters.reserve.domain.ReserveDto;
 import cl.ucn.codecrafters.reserve.domain.ReserveError;
 import cl.ucn.codecrafters.reserve.domain.IReserveRepository;
 import cl.ucn.codecrafters.reserve.domain.Reserve;
+import cl.ucn.codecrafters.reserve.domain.dtos.CreateReserveDto;
 import cl.ucn.codecrafters.reserve.domain.dtos.ReadReserveDto;
 import cl.ucn.codecrafters.room.application.IRoomService;
 import cl.ucn.codecrafters.room.domain.Room;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -125,6 +127,8 @@ public class ReserveService implements IReserveService {
      */
     @Override
     public Reserve update(Integer integer, ReserveDto entity) throws Exception {
+
+        /*
         try {
             Optional<Reserve> entityOptional = this.reserveRepository.findById(integer);
             Reserve entityUpdate = entityOptional.get();
@@ -144,6 +148,8 @@ public class ReserveService implements IReserveService {
         catch (Exception e){
             throw new Exception(e.getMessage());
         }
+        */
+        return null;
     }
 
     /**
@@ -232,6 +238,27 @@ public class ReserveService implements IReserveService {
 
         reserveErrors.setIsValid(isValid);
         return reserveErrors;
+
+    }
+
+    @Override
+    public void createReserve(CreateReserveDto entity) throws Exception {
+
+            LocalDateTime dateTime = LocalDateTime.now();
+
+            Reserve reserve = new Reserve();
+
+            User user = userService.findUserByEmail(entity.getClientEmail());
+            Room room = roomService.findById(entity.getRoomId());
+
+            reserve.setUser(user);
+            reserve.setRoom(room);
+            reserve.setReserveDateTime(new Date());
+            reserve.setArriveDateTime(entity.getCheckIn());
+            reserve.setLeaveDateTime(entity.getCheckOut());
+            reserve.setConfirmed(Boolean.FALSE);
+
+            this.reserveRepository.save(reserve);
 
     }
 

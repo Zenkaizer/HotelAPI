@@ -35,5 +35,5 @@ public interface IUserService {
 
     Boolean userEmailExists(String email);
 
-
+    User findUserByEmail(String clientEmail);
 }

@@ -3,6 +3,7 @@ package cl.ucn.codecrafters.reserve.infraestructure;
 import cl.ucn.codecrafters.reserve.domain.ReserveDto;
 import cl.ucn.codecrafters.reserve.domain.ReserveError;
 import cl.ucn.codecrafters.reserve.application.IReserveService;
+import cl.ucn.codecrafters.reserve.domain.dtos.CreateReserveDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,23 @@ public class ReserveController {
 
     @Autowired
     protected IReserveService reserveService;
+
+
+    //localhost:9000/reserves/create
+    @PostMapping("/create")
+    public ResponseEntity<?> createReserve(@RequestBody CreateReserveDto entity) {
+
+        try{
+            this.reserveService.createReserve(entity);
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Error, por favor intente más tarde.");
+        }
+        return ResponseEntity.ok().body("Reserva creada con éxito");
+    }
+
+
 
     @GetMapping("")
     public ResponseEntity<?> getAll() {

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -28,13 +29,13 @@ public class Reserve extends Base {
     private Room room;
 
     @Column(name = "reserve_date_time")
-    private LocalDateTime reserveDateTime;
+    private Date reserveDateTime;
 
     @Column(name = "arrive_date_time")
-    private LocalDateTime arriveDateTime;
+    private Date arriveDateTime;
 
     @Column(name = "leave_date_time")
-    private LocalDateTime leaveDateTime;
+    private Date leaveDateTime;
 
     @Column(name = "confirmed")
     private Boolean confirmed;
