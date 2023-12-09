@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.497s</div>
+<div class="counter">0.464s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,7 @@
 </thead>
 <tr>
 <td class="success">contextLoads()</td>
-<td class="success">0.497s</td>
+<td class="success">0.464s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -87,8 +87,8 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>09:58:06.336 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [cl.ucn.codecrafters.HotelapiApplicationTests]: HotelapiApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-09:58:06.438 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration cl.ucn.codecrafters.HotelapiApplication for test class cl.ucn.codecrafters.HotelapiApplicationTests
+<pre>11:13:25.325 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [cl.ucn.codecrafters.HotelapiApplicationTests]: HotelapiApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+11:13:25.431 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration cl.ucn.codecrafters.HotelapiApplication for test class cl.ucn.codecrafters.HotelapiApplicationTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -98,25 +98,25 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.0)
 
-2023-12-09T09:58:06.868-03:00  INFO 444 --- [    Test worker] c.u.c.HotelapiApplicationTests           : Starting HotelapiApplicationTests using Java 17.0.9 with PID 444 (started by mcesp in C:\Users\mcesp\OneDrive\Documentos\Proyecto Integrador - Software\hotelapi)
-2023-12-09T09:58:06.870-03:00  INFO 444 --- [    Test worker] c.u.c.HotelapiApplicationTests           : No active profile set, falling back to 1 default profile: &quot;default&quot;
-2023-12-09T09:58:07.738-03:00  INFO 444 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2023-12-09T09:58:07.822-03:00  INFO 444 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 75 ms. Found 4 JPA repository interfaces.
-2023-12-09T09:58:08.499-03:00  INFO 444 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2023-12-09T09:58:08.612-03:00  INFO 444 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.3.1.Final
-2023-12-09T09:58:08.690-03:00  INFO 444 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2023-12-09T09:58:09.010-03:00  INFO 444 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2023-12-09T09:58:09.039-03:00  INFO 444 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2023-12-09T09:58:11.737-03:00  INFO 444 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@57b130f6
-2023-12-09T09:58:11.740-03:00  INFO 444 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2023-12-09T09:58:11.969-03:00  WARN 444 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: MySQL57Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2023-12-09T09:58:11.970-03:00  WARN 444 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000026: MySQL57Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
-2023-12-09T09:58:12.879-03:00  INFO 444 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2023-12-09T09:58:15.212-03:00  INFO 444 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2023-12-09T09:58:15.771-03:00  INFO 444 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2023-12-09T09:58:16.662-03:00  WARN 444 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2023-12-09T09:58:17.711-03:00  INFO 444 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@38c61ab, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@68378acc, org.springframework.security.web.context.SecurityContextHolderFilter@40f95b87, org.springframework.security.web.header.HeaderWriterFilter@44acce5d, org.springframework.web.filter.CorsFilter@5ea73927, org.springframework.security.web.authentication.logout.LogoutFilter@39b58f7d, cl.ucn.codecrafters.configuration.JwtAuthenticationFilter@23591a2c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@50dfac19, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1ef48e49, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@47b7bcb6, org.springframework.security.web.session.SessionManagementFilter@63ad4b55, org.springframework.security.web.access.ExceptionTranslationFilter@3fc736c4, org.springframework.security.web.access.intercept.AuthorizationFilter@2149532d]
-2023-12-09T09:58:18.201-03:00  INFO 444 --- [    Test worker] c.u.c.HotelapiApplicationTests           : Started HotelapiApplicationTests in 11.588 seconds (process running for 12.655)
+2023-12-09T11:13:25.882-03:00  INFO 6468 --- [    Test worker] c.u.c.HotelapiApplicationTests           : Starting HotelapiApplicationTests using Java 17.0.9 with PID 6468 (started by mcesp in C:\Users\mcesp\OneDrive\Documentos\Proyecto Integrador - Software\hotelapi)
+2023-12-09T11:13:25.884-03:00  INFO 6468 --- [    Test worker] c.u.c.HotelapiApplicationTests           : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2023-12-09T11:13:26.738-03:00  INFO 6468 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-12-09T11:13:26.812-03:00  INFO 6468 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 64 ms. Found 4 JPA repository interfaces.
+2023-12-09T11:13:27.447-03:00  INFO 6468 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-12-09T11:13:27.539-03:00  INFO 6468 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.3.1.Final
+2023-12-09T11:13:27.598-03:00  INFO 6468 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2023-12-09T11:13:27.863-03:00  INFO 6468 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-12-09T11:13:27.894-03:00  INFO 6468 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-12-09T11:13:30.501-03:00  INFO 6468 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@556aed22
+2023-12-09T11:13:30.503-03:00  INFO 6468 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-12-09T11:13:30.721-03:00  WARN 6468 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: MySQL57Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-12-09T11:13:30.722-03:00  WARN 6468 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000026: MySQL57Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2023-12-09T11:13:31.498-03:00  INFO 6468 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2023-12-09T11:13:33.832-03:00  INFO 6468 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-12-09T11:13:34.392-03:00  INFO 6468 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2023-12-09T11:13:35.264-03:00  WARN 6468 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-09T11:13:36.126-03:00  INFO 6468 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@490fa135, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@94d4dd, org.springframework.security.web.context.SecurityContextHolderFilter@5170ebb6, org.springframework.security.web.header.HeaderWriterFilter@2c492b03, org.springframework.web.filter.CorsFilter@5867c87, org.springframework.security.web.authentication.logout.LogoutFilter@1331742, cl.ucn.codecrafters.configuration.JwtAuthenticationFilter@6f8060ac, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1abe611c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@92f6ae6, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@112e72ea, org.springframework.security.web.session.SessionManagementFilter@60f8d38c, org.springframework.security.web.access.ExceptionTranslationFilter@2073d71b, org.springframework.security.web.access.intercept.AuthorizationFilter@656586f7]
+2023-12-09T11:13:36.524-03:00  INFO 6468 --- [    Test worker] c.u.c.HotelapiApplicationTests           : Started HotelapiApplicationTests in 10.917 seconds (process running for 12.117)
 </pre>
 </span>
 </div>
@@ -128,7 +128,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.2.1</a> at 09-12-2023 09:58:19</p>
+<a href="http://www.gradle.org">Gradle 8.5</a> at 09-12-2023 11:13:38</p>
 </div>
 </div>
 </body>
