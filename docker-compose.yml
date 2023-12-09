@@ -1,32 +1,11 @@
-version: "1"
+version: "3.3"
 
 services:
-
-  mysqldb:
-    container_name: mysqldb
-    image: mysql
-    ports:
-      - "3307:3306"
-    environment:
-      MYSQL_DATABASE: db_codecrafters
-      MYSQL_ROOT_PASSWORD: root
 
   springboot-app:
     container_name: spring-app
     restart: always
-    image: springboot-app
+    image: marxx0103/codecrafters_backend
     build: .
     ports:
-      - "9000:9000"
-    environment:
-      MYSQL_HOST: mysqldb
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_PORT: 3306
-
-  react-app:
-    container_name: react-app
-    image: react-app
-    ports:
-      - "3000:3000"
-
+      - "80:9000"

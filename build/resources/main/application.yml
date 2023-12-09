@@ -1,0 +1,17 @@
+spring:
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    url: jdbc:mysql://dbcodecrafters.c6hhegdmqzqt.us-east-2.rds.amazonaws.com:3306/db_codecrafters
+    username: admin
+    password: laclavesecreta
+  sql:
+    init:
+      platform: org.hibernate.dialect.MySQL8Dialect
+
+server:
+  port: 9000
