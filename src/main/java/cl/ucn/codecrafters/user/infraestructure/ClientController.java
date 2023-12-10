@@ -3,9 +3,8 @@ package cl.ucn.codecrafters.user.infraestructure;
 import cl.ucn.codecrafters.user.application.IUserService;
 import cl.ucn.codecrafters.user.domain.entities.Role;
 import cl.ucn.codecrafters.user.domain.entities.User;
-import cl.ucn.codecrafters.user.domain.UserError;
-import cl.ucn.codecrafters.user.domain.dtos.ClientDto;
-import cl.ucn.codecrafters.user.domain.dtos.CreateClientDto;
+import cl.ucn.codecrafters.user.domain.client.ReadClientDto;
+import cl.ucn.codecrafters.user.domain.client.CreateClientDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,12 +50,12 @@ public class ClientController {
     public ResponseEntity<?> getOneClient(@PathVariable Integer id) {
         try {
 
-            ClientDto clientDto = this.userService.findUserDtoById(id);
-            if (clientDto == null){
+            ReadClientDto readClientDto = null;
+            if (readClientDto == null){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("{\"error\":\"Error, usuario no encontrado.\"}");
             }else{
-                return ResponseEntity.status(HttpStatus.OK).body(clientDto);
+                return ResponseEntity.status(HttpStatus.OK).body(readClientDto);
             }
         }
         catch (Exception e){
@@ -104,13 +103,11 @@ public class ClientController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateClient(@PathVariable Integer id, @RequestBody User entity) {
         try {
-            UserError userError = this.userService.validateUserErrors(entity);
 
-            if (userError.getIsValid()){
-                return ResponseEntity.status(HttpStatus.OK).body(this.userService.update(id, entity));
-            }
 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userError);
+
+            return ResponseEntity.status(HttpStatus.OK).body(this.userService.update(id, entity));
+
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

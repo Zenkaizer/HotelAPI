@@ -3,6 +3,7 @@ package cl.ucn.codecrafters.room.application;
 import cl.ucn.codecrafters.room.domain.RoomError;
 import cl.ucn.codecrafters.room.domain.IRoomRepository;
 import cl.ucn.codecrafters.room.domain.Room;
+import cl.ucn.codecrafters.room.domain.dtos.CreateRoomDto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,32 @@ public class RoomService implements IRoomService {
         }
         catch (Exception e){
             throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    public Room create(CreateRoomDto entity) throws Exception {
+        try{
+            Room room = new Room();
+
+            room.setIndividualBeds(entity.getIndividualBeds());
+            room.setDualBeds(entity.getDualBeds());
+            room.setMaxCapacity(entity.getMaxCapacity());
+
+            if (entity.getHaveBathroom().equals("Si")){
+                room.setHaveBathroom(Boolean.TRUE);
+            }
+            else{
+                room.setHaveBathroom(Boolean.FALSE);
+            }
+
+            room.setPrice(entity.getPrice());
+
+            return this.roomRepository.save(room);
+
+        }
+        catch (Exception e){
+            throw new Exception("Error al crear la habitación");
         }
     }
 

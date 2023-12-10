@@ -1,4 +1,4 @@
-package cl.ucn.codecrafters.user.domain.dtos;
+package cl.ucn.codecrafters.user.domain.client;
 
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;

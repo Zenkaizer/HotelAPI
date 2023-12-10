@@ -2,10 +2,9 @@ package cl.ucn.codecrafters.reserve.application;
 
 
 import cl.ucn.codecrafters.reserve.domain.Reserve;
-import cl.ucn.codecrafters.reserve.domain.ReserveDto;
-import cl.ucn.codecrafters.reserve.domain.ReserveError;
 import cl.ucn.codecrafters.reserve.domain.dtos.CreateReserveDto;
 import cl.ucn.codecrafters.reserve.domain.dtos.ReadReserveDto;
+import cl.ucn.codecrafters.reserve.domain.dtos.UpdateReserveDto;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ public interface IReserveService{
      * @return All corresponding entities in a list.
      * @throws Exception Exception.
      */
-    List<ReadReserveDto> readAllReserves() throws Exception;
+    List<ReadReserveDto> readAll() throws Exception;
 
     /**
      * Method in charge of finding an entity according to its ID.
@@ -27,23 +26,6 @@ public interface IReserveService{
     Reserve findById(Integer id) throws Exception;
 
     /**
-     * Method responsible for storing an entity in the database.
-     * @param entity Entity.
-     * @return The saved entity.
-     * @throws Exception Exception.
-     */
-    Reserve save(ReserveDto entity) throws Exception;
-
-    /**
-     * Method responsible for updating an entity in the database.
-     * @param id Entity ID.
-     * @param entity Entity.
-     * @return The updated entity.
-     * @throws Exception Exception.
-     */
-    Reserve update(Integer id, ReserveDto entity) throws Exception;
-
-    /**
      * Method responsible for removing an entity from the database.
      * @param id Entity ID.
      * @return True if is deleted or False if not.
@@ -51,9 +33,19 @@ public interface IReserveService{
      */
     boolean delete(Integer id) throws Exception;
 
+    /**
+     * Method responsible for creating an entity in the database.
+     * @param entity Reserve entity.
+     * @throws Exception Exception.
+     */
+    void create(CreateReserveDto entity) throws Exception;
 
-    ReserveError validateReserveErrors(ReserveDto reserve);
-
-    void createReserve(CreateReserveDto entity) throws Exception;
+    /**
+     * Method responsible for updating an entity in the database.
+     * @param id Entity ID.
+     * @param entity Reserve entity.
+     * @throws Exception Exception.
+     */
+    void update(Integer id, UpdateReserveDto entity) throws Exception;
 
 }

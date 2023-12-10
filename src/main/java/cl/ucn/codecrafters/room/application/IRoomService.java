@@ -2,6 +2,7 @@ package cl.ucn.codecrafters.room.application;
 
 import cl.ucn.codecrafters.room.domain.Room;
 import cl.ucn.codecrafters.room.domain.RoomError;
+import cl.ucn.codecrafters.room.domain.dtos.CreateRoomDto;
 
 import java.util.List;
 
@@ -21,6 +22,8 @@ public interface IRoomService{
      * @throws Exception Exception.
      */
     Room findById(Integer id) throws Exception;
+
+    Room create(CreateRoomDto entity) throws Exception;
 
     /**
      * Method responsible for storing an entity in the database.

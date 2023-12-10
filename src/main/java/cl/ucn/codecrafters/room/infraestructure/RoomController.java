@@ -4,6 +4,7 @@ package cl.ucn.codecrafters.room.infraestructure;
 import cl.ucn.codecrafters.room.domain.RoomError;
 import cl.ucn.codecrafters.room.application.IRoomService;
 import cl.ucn.codecrafters.room.domain.Room;
+import cl.ucn.codecrafters.room.domain.dtos.CreateRoomDto;
 import cl.ucn.codecrafters.utils.IBaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,18 +51,27 @@ public class RoomController implements IBaseController<Room, Integer> {
         }
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<?> createRoom(@RequestBody CreateRoomDto entity){
+
+        Room newRoom;
+
+        try{
+
+            newRoom = this.roomService.create(entity);
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Error, por favor intente más tarde.");
+        }
+        return ResponseEntity.ok().body(newRoom);
+    }
+
     @Override
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody Room entity) {
         try {
-
-            RoomError roomError = this.roomService.validateRoomErrors(entity);
-
-            if(roomError.getIsValid()){
-                return ResponseEntity.status(HttpStatus.OK).body(this.roomService.save(entity));
-            }
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(roomError);
+            return ResponseEntity.status(HttpStatus.OK).body(this.roomService.save(entity));
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
