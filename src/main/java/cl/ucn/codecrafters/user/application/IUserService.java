@@ -1,10 +1,9 @@
 package cl.ucn.codecrafters.user.application;
 
-import cl.ucn.codecrafters.user.domain.UserError;
-import cl.ucn.codecrafters.user.domain.dtos.AdministrativeDto;
-import cl.ucn.codecrafters.user.domain.dtos.ClientDto;
+import cl.ucn.codecrafters.user.domain.administrative.CreateAdministrativeDto;
+import cl.ucn.codecrafters.user.domain.administrative.ReadAdministrativeDto;
+import cl.ucn.codecrafters.user.domain.client.ReadClientDto;
 import cl.ucn.codecrafters.user.domain.entities.User;
-import cl.ucn.codecrafters.user.domain.dtos.UserDto;
 
 import java.util.List;
 
@@ -13,15 +12,11 @@ public interface IUserService {
 
     List<User> findAllUsers() throws Exception;
 
-    List<ClientDto> findAllClients();
+    List<ReadClientDto> findAllClients();
 
-    List<AdministrativeDto> findAllAdministratives();
+    List<ReadAdministrativeDto> findAllAdministratives() throws Exception;
 
     User findUserById(Integer integer) throws Exception;
-
-    <E extends UserDto> E findUserDtoById(Integer id);
-
-    UserError validateUserErrors(User user);
 
     boolean delete(Integer integer) throws Exception;
 
@@ -29,7 +24,7 @@ public interface IUserService {
 
     User saveClient(User entity) throws Exception;
 
-    User saveAdministrative(User entity) throws Exception;
+    User saveAdministrative(CreateAdministrativeDto entity) throws Exception;
 
     User saveAdmin(User entity) throws Exception;
 

@@ -1,8 +1,8 @@
 package cl.ucn.codecrafters.user.infraestructure;
 import cl.ucn.codecrafters.user.application.IUserService;
+import cl.ucn.codecrafters.user.domain.administrative.CreateAdministrativeDto;
+import cl.ucn.codecrafters.user.domain.administrative.ReadAdministrativeDto;
 import cl.ucn.codecrafters.user.domain.entities.User;
-import cl.ucn.codecrafters.user.domain.UserError;
-import cl.ucn.codecrafters.user.domain.dtos.AdministrativeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,14 +28,13 @@ public class AdministrativeController {
             List<?> administrativeList = this.userService.findAllAdministratives();
 
             if (administrativeList.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.OK).body("{\"error\":\"No hay administrativos para mostrar.\"}");
+                return ResponseEntity.badRequest().body("No hay administrativos para mostrar.");
             }
 
-            return ResponseEntity.status(HttpStatus.OK).body(administrativeList);
+            return ResponseEntity.ok().body(administrativeList);
         }
         catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("{\"error\":\"Error, por favor intente más tarde.\"}");
+            return ResponseEntity.badRequest().body("Hubo un error al obtener los administrativos.");
         }
     }
 
@@ -43,7 +42,7 @@ public class AdministrativeController {
     public ResponseEntity<?> getOneAdministrative(@PathVariable Integer id) {
         try {
 
-            AdministrativeDto administrativeDto = this.userService.findUserDtoById(id);
+            ReadAdministrativeDto administrativeDto = null;
 
             if (administrativeDto == null){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -60,21 +59,16 @@ public class AdministrativeController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> save(@RequestBody User entity) {
+    public ResponseEntity<?> createAdministrative(@RequestBody CreateAdministrativeDto entity){
         try {
 
-            UserError userError = this.userService.validateUserErrors(entity);
-
-            if (userError.getIsValid()){
-                return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.saveAdministrative(entity));
-            }
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userError);
+            User user = this.userService.saveAdministrative(entity);
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
 
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("{\"error\":\"Error, por favor intente más tarde.\"}");
+                    .body("Hubo un error en la creación del usuario, intente nuevamente.");
         }
     }
 
@@ -82,13 +76,8 @@ public class AdministrativeController {
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody User entity) {
         try {
 
-            UserError userError = this.userService.validateUserErrors(entity);
 
-            if (userError.getIsValid()){
-                return ResponseEntity.status(HttpStatus.OK).body(this.userService.update(id, entity));
-            }
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userError);
+            return ResponseEntity.status(HttpStatus.OK).body(this.userService.update(id, entity));
 
         }
         catch (Exception e){

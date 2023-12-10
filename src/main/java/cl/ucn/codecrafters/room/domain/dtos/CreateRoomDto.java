@@ -1,6 +1,4 @@
-package cl.ucn.codecrafters.room.domain;
-
-import cl.ucn.codecrafters.utils.Base;
+package cl.ucn.codecrafters.room.domain.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,12 +8,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomDto {
+public class CreateRoomDto {
 
-    private Integer id;
     private Integer individualBeds;
     private Integer dualBeds;
-    private Boolean haveBathroom;
-    private Long price;
+    private Integer maxCapacity;
+    private String haveBathroom;
+    private Integer price;
 
 }

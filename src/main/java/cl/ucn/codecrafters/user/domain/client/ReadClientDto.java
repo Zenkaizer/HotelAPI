@@ -1,13 +1,15 @@
-package cl.ucn.codecrafters.user.domain.dtos;
-import lombok.*;
+package cl.ucn.codecrafters.user.domain.client;
 
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+@NoArgsConstructor
+public class ReadClientDto {
 
     private Integer id;
     private String dni;

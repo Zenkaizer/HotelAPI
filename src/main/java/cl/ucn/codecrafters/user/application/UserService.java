@@ -1,20 +1,17 @@
 package cl.ucn.codecrafters.user.application;
 
-import cl.ucn.codecrafters.user.domain.UserError;
-import cl.ucn.codecrafters.user.domain.dtos.AdministrativeDto;
-import cl.ucn.codecrafters.user.domain.dtos.ClientDto;
-import cl.ucn.codecrafters.user.domain.dtos.UserDto;
+import cl.ucn.codecrafters.user.domain.administrative.CreateAdministrativeDto;
+import cl.ucn.codecrafters.user.domain.administrative.ReadAdministrativeDto;
+import cl.ucn.codecrafters.user.domain.client.ReadClientDto;
 import cl.ucn.codecrafters.user.domain.entities.Role;
 import cl.ucn.codecrafters.user.domain.entities.User;
 import cl.ucn.codecrafters.user.domain.repositories.IUserRepository;
-import cl.ucn.codecrafters.utils.Validation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,10 +48,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<ClientDto> findAllClients() {
+    public List<ReadClientDto> findAllClients() {
 
         List<User> userList = this.userRepository.findByRole(Role.CLIENT);
-        List<ClientDto> clientList = new ArrayList<>();
+        List<ReadClientDto> clientList = new ArrayList<>();
 
         if (userList.isEmpty()){
             //TODO: Cambiar
@@ -63,16 +60,16 @@ public class UserService implements IUserService {
 
         for (User user : userList){
 
-            ClientDto clientDto = new ClientDto();
+            ReadClientDto readClientDto = new ReadClientDto();
 
-            clientDto.setId(user.getId());
-            clientDto.setDni(user.getDni());
-            clientDto.setFirstName(user.getFirstName());
-            clientDto.setLastName(user.getLastName());
-            clientDto.setNationality(user.getNationality());
-            clientDto.setPhone(user.getPhone());
+            readClientDto.setId(user.getId());
+            readClientDto.setDni(user.getDni());
+            readClientDto.setFirstName(user.getFirstName());
+            readClientDto.setLastName(user.getLastName());
+            readClientDto.setNationality(user.getNationality());
+            readClientDto.setPhone(user.getPhone());
 
-            clientList.add(clientDto);
+            clientList.add(readClientDto);
 
         }
 
@@ -80,30 +77,34 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<AdministrativeDto> findAllAdministratives() {
-        List<User> userList = this.userRepository.findByRole(Role.ADMINISTRATIVE);
-        List<AdministrativeDto> adminitstrativeList = new ArrayList<>();
+    public List<ReadAdministrativeDto> findAllAdministratives() throws Exception {
 
-        if (userList.isEmpty()){
-            //TODO: Cambiar
-            System.out.println("[!] No existen usuarios en el sistema [!]");
+        try {
+
+            List<User> userList = this.userRepository.findByRole(Role.ADMINISTRATIVE);
+            List<ReadAdministrativeDto> administrativeList = new ArrayList<>();
+
+            for (User user : userList){
+
+                ReadAdministrativeDto administrativeDto = new ReadAdministrativeDto();
+
+                administrativeDto.setDni(user.getDni());
+                administrativeDto.setFirstName(user.getFirstName());
+                administrativeDto.setLastName(user.getLastName());
+                administrativeDto.setEmail(user.getEmail());
+                administrativeDto.setPhone(user.getPhone());
+
+                administrativeList.add(administrativeDto);
+
+            }
+
+            return administrativeList;
+
+        }
+        catch (Exception e){
+            throw new Exception(e.getMessage());
         }
 
-        for (User user : userList){
-
-            AdministrativeDto administrativeDto = new AdministrativeDto();
-
-            administrativeDto.setDni(user.getDni());
-            administrativeDto.setFirstName(user.getFirstName());
-            administrativeDto.setLastName(user.getLastName());
-            administrativeDto.setNationality(user.getNationality());
-            administrativeDto.setPhone(user.getPhone());
-
-            adminitstrativeList.add(administrativeDto);
-
-        }
-
-        return adminitstrativeList;
     }
 
     /**
@@ -122,65 +123,6 @@ public class UserService implements IUserService {
         catch (Exception e){
             throw new Exception(e.getMessage());
         }
-    }
-
-    @Override
-    public <E extends UserDto> E findUserDtoById(Integer id) {
-        return null;
-    }
-
-
-    @Override
-    public UserError validateUserErrors(User user) {
-
-        UserError userErrors = new UserError();
-        Boolean isValid = Boolean.TRUE;
-
-        if (user.getDni() == null || user.getDni().trim().isEmpty()) {
-            userErrors.setDniError("El RUT/DNI no puede ser vacío o nulo.");
-            isValid = Boolean.FALSE;
-
-        }
-        if (user.getEmail() == null || user.getEmail().trim().isEmpty() || !Validation.
-                        validatePattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Z|a-z]{2,}$", user.getEmail())) {
-
-            userErrors.setEmailError("El correo electrónico es inválido.");
-            isValid = Boolean.FALSE;
-
-        }
-        if (!Validation.validatePattern("^(?=.*[0-9])(?=.*[A-Z]).{8,}$", user.getPassword())) {
-            userErrors.setPasswordError("La contraseña no cumple con los requisitos mínimos.");
-            isValid = Boolean.FALSE;
-
-        }
-        if (user.getFirstName() == null || user.getFirstName().trim().isEmpty()) {
-            userErrors.setFirstNameError("El campo no puede ser nulo o vacío.");
-            isValid = Boolean.FALSE;
-
-        }
-        if (user.getLastName() == null || user.getLastName().trim().isEmpty()) {
-            userErrors.setLastNameError("El campo no puede ser nulo o vacío.");
-            isValid = Boolean.FALSE;
-
-        }
-        if (user.getPhone().length() < 8 || !user.getPhone().matches("\\d+")) {
-            userErrors.setPhoneError("El teléfono debe contener al menos 8 dígitos y debe contener solo números.");
-            isValid = Boolean.FALSE;
-
-        }
-        if (user.getNationality() == null || user.getNationality().trim().isEmpty()) {
-            userErrors.setNationalityError("El campo no puede ser nulo o vacío.");
-            isValid = Boolean.FALSE;
-
-        }
-        if (user.getBirthDate() == null ||user.getBirthDate().after(new Date())) {
-            userErrors.setBirthDateError("La fecha de nacimiento no puede ser posterior a la actual.");
-            isValid = Boolean.FALSE;
-
-        }
-
-        userErrors.setIsValid(isValid);
-        return userErrors;
     }
 
     /**
@@ -210,15 +152,24 @@ public class UserService implements IUserService {
      * @throws Exception Exception.
      */
     @Override
-    public User saveAdministrative(User entity) throws Exception {
+    public User saveAdministrative(CreateAdministrativeDto entity) throws Exception {
         try {
 
-            // Password encode and role assignation.
-            entity.setPassword(this.passwordEncoder.encode(entity.getPassword()));
-            entity.setRole(Role.ADMINISTRATIVE);
+            User user = new User();
 
-            entity = this.userRepository.save(entity);
-            return entity;
+            user.setDni(entity.getDni());
+            user.setEmail(entity.getEmail());
+            user.setFirstName(entity.getFirstName());
+            user.setLastName(entity.getLastName());
+            user.setPhone(entity.getPhone());
+            user.setNationality(entity.getNationality());
+            user.setBirthDate(entity.getBirthDate());
+            // Password encode are the same as the DNI.
+            user.setPassword(this.passwordEncoder.encode(entity.getDni()));
+            user.setRole(Role.ADMINISTRATIVE);
+
+            user = this.userRepository.save(user);
+            return user;
         }
         catch (Exception e){
             throw new Exception(e.getMessage());
