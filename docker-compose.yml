@@ -6,6 +6,5 @@ services:
     container_name: spring-app
     restart: always
     image: marxx0103/hotelapi
-    build: .
     ports:
       - "80:9000"
