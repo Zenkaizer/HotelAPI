@@ -26,7 +26,7 @@ public class RegisterRequest {
 
     private String nationality;
 
-    private LocalDateTime birthDate;
+    private String birthDate;
 
     private String password;
 

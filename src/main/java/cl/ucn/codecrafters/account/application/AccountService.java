@@ -64,6 +64,8 @@ public class AccountService {
             return null;
         }
 
+        LocalDateTime birthDate = Validation.convertToLocalDate(request.getBirthDate());
+
         var createdUser = User.builder()
                 .dni(request.getDni())
                 .email(request.getEmail())
@@ -72,7 +74,7 @@ public class AccountService {
                 .lastName(request.getLastName())
                 .phone(request.getPhone())
                 .nationality(request.getNationality())
-                .birthDate(request.getBirthDate())
+                .birthDate(birthDate)
                 .role(Role.CLIENT)
                 .build();
 
