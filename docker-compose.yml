@@ -1,10 +1,9 @@
 version: "3.3"
 
 services:
-
   springboot-app:
     container_name: spring-app
     restart: always
     image: marxx0103/hotelapi
     ports:
-      - "80:9000"
+      - 80:9000
