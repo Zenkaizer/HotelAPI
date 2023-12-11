@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -23,6 +24,6 @@ public class CreateClientDto {
     private String lastName;
     private String phone;
     private String nationality;
-    private Date birthDate;
+    private String birthDate;
 
 }

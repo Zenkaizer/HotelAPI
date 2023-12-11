@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -43,7 +44,7 @@ public class User extends Base implements UserDetails {
     private String nationality;
 
     @Column(name = "birth_date")
-    private Date birthDate;
+    private LocalDateTime birthDate;
 
     @Enumerated(EnumType.STRING)
     private Role role;

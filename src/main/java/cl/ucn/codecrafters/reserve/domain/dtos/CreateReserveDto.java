@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -15,7 +16,7 @@ public class CreateReserveDto {
 
     private Integer roomId;
     private String clientEmail;
-    private Date checkIn;
-    private Date checkOut;
+    private String checkIn;
+    private String checkOut;
 
 }

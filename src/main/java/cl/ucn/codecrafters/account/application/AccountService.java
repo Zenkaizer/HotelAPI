@@ -1,21 +1,22 @@
 package cl.ucn.codecrafters.account.application;
 
-import cl.ucn.codecrafters.account.domain.LoginRequest;
-import cl.ucn.codecrafters.account.domain.AuthResponse;
-import cl.ucn.codecrafters.account.domain.RegisterRequest;
-import cl.ucn.codecrafters.account.domain.UpdateRequest;
+import cl.ucn.codecrafters.account.domain.*;
 import cl.ucn.codecrafters.token.Token;
 import cl.ucn.codecrafters.token.ITokenRepository;
 import cl.ucn.codecrafters.token.TokenType;
 import cl.ucn.codecrafters.user.domain.entities.Role;
 import cl.ucn.codecrafters.user.domain.entities.User;
 import cl.ucn.codecrafters.user.domain.repositories.IUserRepository;
+import cl.ucn.codecrafters.utils.Validation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 
 @Service
@@ -53,6 +54,7 @@ public class AccountService {
                 .token(jwtToken)
                 .email(user.getEmail())
                 .role(user.getRole().name())
+                .userId(user.getId())
                 .build();
     }
 
@@ -83,13 +85,14 @@ public class AccountService {
                 .token(jwtToken)
                 .email(user.getEmail())
                 .role(user.getRole().name())
+                .userId(user.getId())
                 .build();
     }
 
     /**
-     * Method that
-     * @param request
-     * @return
+     * Method that update the user account.
+     * @param request The request with the new data.
+     * @return The response with the new token.
      */
     public AuthResponse updateUser(UpdateRequest request) {
 
@@ -110,8 +113,36 @@ public class AccountService {
                 .token(jwtToken)
                 .email(user.getEmail())
                 .role(user.getRole().name())
+                .userId(user.getId())
                 .build();
     }
+
+    public AuthResponse updateUser(EditRequest request) {
+
+        var user = this.userRepository.findByEmail(request.getEmail()).orElseThrow();
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setPhone(request.getPhone());
+        user.setNationality(request.getNationality());
+
+        LocalDateTime birthDate = Validation.convertToLocalDate(request.getBirthDate());
+        user.setBirthDate(birthDate);
+
+        var updatedUser = this.userRepository.save(user);
+        var jwtToken = this.jwtService.generateToken(updatedUser);
+
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
+
+        return AuthResponse.builder()
+                .token(jwtToken)
+                .email(user.getEmail())
+                .role(user.getRole().name())
+                .userId(user.getId())
+                .build();
+    }
+
 
     /**
      * This method revoke all user's tokens.
@@ -149,5 +180,9 @@ public class AccountService {
                 .build();
 
         this.tokenRepository.save(token);
+    }
+
+    public User findUserById(Integer id) {
+        return this.userRepository.findById(id).orElseThrow();
     }
 }
