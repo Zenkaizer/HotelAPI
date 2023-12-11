@@ -1,8 +1,9 @@
 package cl.ucn.codecrafters.room.application;
 
 import cl.ucn.codecrafters.room.domain.Room;
-import cl.ucn.codecrafters.room.domain.RoomError;
 import cl.ucn.codecrafters.room.domain.dtos.CreateRoomDto;
+import cl.ucn.codecrafters.room.domain.dtos.ReadRoomDto;
+import cl.ucn.codecrafters.room.domain.dtos.UpdateRoomDto;
 
 import java.util.List;
 
@@ -11,9 +12,8 @@ public interface IRoomService{
     /**
      * Method responsible for listing all entities.
      * @return All corresponding entities in a list.
-     * @throws Exception Exception.
      */
-    List<Room> findAll() throws Exception;
+    List<ReadRoomDto> findAll();
 
     /**
      * Method in charge of finding an entity according to its ID.
@@ -40,7 +40,7 @@ public interface IRoomService{
      * @return The updated entity.
      * @throws Exception Exception.
      */
-    Room update(Integer id, Room entity) throws Exception;
+    Room update(Integer id, UpdateRoomDto entity) throws Exception;
 
     /**
      * Method responsible for removing an entity from the database.
@@ -50,6 +50,5 @@ public interface IRoomService{
      */
     boolean delete(Integer id) throws Exception;
 
-    RoomError validateRoomErrors(Room room);
 
 }

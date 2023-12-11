@@ -1,4 +1,4 @@
-package cl.ucn.codecrafters.user.domain.administrative;
+package cl.ucn.codecrafters.account.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,13 +9,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReadAdministrativeDto {
+public class EditRequest {
 
-    private Integer id;
     private String dni;
+    private String email;
     private String firstName;
     private String lastName;
-    private String email;
     private String phone;
+    private String nationality;
+    private String birthDate;
 
 }

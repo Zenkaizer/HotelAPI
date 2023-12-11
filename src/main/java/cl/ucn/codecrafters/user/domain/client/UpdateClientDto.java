@@ -1,4 +1,4 @@
-package cl.ucn.codecrafters.user.domain.administrative;
+package cl.ucn.codecrafters.user.domain.client;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,13 +9,13 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReadAdministrativeDto {
+public class UpdateClientDto {
 
     private Integer id;
     private String dni;
     private String firstName;
     private String lastName;
-    private String email;
+    private String nationality;
     private String phone;
 
 }

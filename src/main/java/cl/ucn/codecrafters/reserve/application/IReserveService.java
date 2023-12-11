@@ -38,7 +38,7 @@ public interface IReserveService{
      * @param entity Reserve entity.
      * @throws Exception Exception.
      */
-    void create(CreateReserveDto entity) throws Exception;
+    Reserve create(CreateReserveDto entity) throws Exception;
 
     /**
      * Method responsible for updating an entity in the database.

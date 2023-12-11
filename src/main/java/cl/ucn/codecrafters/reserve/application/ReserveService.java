@@ -9,11 +9,15 @@ import cl.ucn.codecrafters.room.application.IRoomService;
 import cl.ucn.codecrafters.room.domain.Room;
 import cl.ucn.codecrafters.user.application.IUserService;
 import cl.ucn.codecrafters.user.domain.entities.User;
+import cl.ucn.codecrafters.utils.Validation;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,14 +47,14 @@ public class ReserveService implements IReserveService {
 
         List<ReadReserveDto> reserveDtoList = new ArrayList<>();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for (Reserve reserve : reserveList) {
 
             ReadReserveDto readReserveDto = new ReadReserveDto();
 
-            String checkIn = dateFormat.format(reserve.getArriveDateTime());
-            String checkOut = dateFormat.format(reserve.getLeaveDateTime());
+            String checkIn = reserve.getArriveDateTime().format(formatter);
+            String checkOut = reserve.getLeaveDateTime().format(formatter);
 
             readReserveDto.setRoomId(reserve.getRoom().getId());
             readReserveDto.setClientRut(reserve.getUser().getDni());
@@ -60,12 +64,10 @@ public class ReserveService implements IReserveService {
             readReserveDto.setCheckOut(checkOut);
             readReserveDto.setConfirmed(reserve.getConfirmed());
 
-            int diffInMillies = Math.toIntExact(Math.abs(reserve.getArriveDateTime().getTime()
-                    - reserve.getLeaveDateTime().getTime()));
+            Duration duration = Duration.between(reserve.getArriveDateTime(), reserve.getLeaveDateTime());
+            int diffInDays = (int) duration.toDays();
 
-            Integer days = Math.toIntExact(TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS));
-
-            readReserveDto.setPrice(reserve.getRoom().getPrice() * days);
+            readReserveDto.setPrice(reserve.getRoom().getPrice() * diffInDays);
             reserveDtoList.add(readReserveDto);
         }
 
@@ -117,25 +119,28 @@ public class ReserveService implements IReserveService {
      * {@inheritDoc}
      */
     @Override
-    public void create(CreateReserveDto entity) throws Exception {
+    public Reserve create(CreateReserveDto entity) throws Exception {
 
-            Reserve reserve = new Reserve();
+        Reserve reserve = new Reserve();
 
-            if (!validateReserve(-1, entity.getCheckIn(), entity.getCheckOut())) {
-                throw new Exception("La reserva no es válida.");
-            }
+        LocalDateTime checkIn = Validation.convertToLocalDate(entity.getCheckIn());
+        LocalDateTime checkOut = Validation.convertToLocalDate(entity.getCheckOut());
 
-            User user = userService.findUserByEmail(entity.getClientEmail());
-            Room room = roomService.findById(entity.getRoomId());
+        if (!validateReserve(-1, checkIn, checkOut)) {
+            throw new Exception("La reserva no es válida.");
+        }
 
-            reserve.setUser(user);
-            reserve.setRoom(room);
-            reserve.setReserveDateTime(new Date());
-            reserve.setArriveDateTime(entity.getCheckIn());
-            reserve.setLeaveDateTime(entity.getCheckOut());
-            reserve.setConfirmed(Boolean.FALSE);
+        User user = userService.findUserByEmail(entity.getClientEmail());
+        Room room = roomService.findById(entity.getRoomId());
 
-            this.reserveRepository.save(reserve);
+        reserve.setUser(user);
+        reserve.setRoom(room);
+        reserve.setReserveDateTime(LocalDateTime.now());
+        reserve.setArriveDateTime(checkIn);
+        reserve.setLeaveDateTime(checkOut);
+        reserve.setConfirmed(Boolean.FALSE);
+
+        return this.reserveRepository.save(reserve);
 
     }
 
@@ -150,12 +155,15 @@ public class ReserveService implements IReserveService {
         reserve.setRoom(roomService.findById(entity.getRoomId()));
         reserve.setUser(userService.findUserByEmail(entity.getClientEmail()));
 
-        if (!validateReserve(id, entity.getCheckIn(), entity.getCheckOut())) {
+        LocalDateTime checkIn = Validation.convertToLocalDate(entity.getCheckIn());
+        LocalDateTime checkOut = Validation.convertToLocalDate(entity.getCheckOut());
+
+        if (!validateReserve(id, checkIn, checkOut)) {
             throw new Exception("La reserva no es válida.");
         }
 
-        reserve.setArriveDateTime(entity.getCheckIn());
-        reserve.setLeaveDateTime(entity.getCheckOut());
+        reserve.setArriveDateTime(checkIn);
+        reserve.setLeaveDateTime(checkOut);
         reserve.setConfirmed(entity.getConfirmed());
 
         this.reserveRepository.save(reserve);
@@ -169,7 +177,7 @@ public class ReserveService implements IReserveService {
      * @param checkOut The checkOut date.
      * @return True if the reservation is valid, false otherwise.
      */
-    private boolean validateReserve(int currentReservationId, Date checkIn, Date checkOut) {
+    private boolean validateReserve(int currentReservationId, LocalDateTime checkIn, LocalDateTime checkOut) {
 
         // Obtains all the reservations.
         List<Reserve> reserveList = this.reserveRepository.findAll();
@@ -181,7 +189,7 @@ public class ReserveService implements IReserveService {
             if (reservation.getId() != currentReservationId) {
 
                 // Verify if the checkIn and checkOut dates are between the reservation dates.
-                if (checkIn.before(reservation.getLeaveDateTime()) && checkOut.after(reservation.getArriveDateTime())) {
+                if (checkIn.isBefore(reservation.getLeaveDateTime()) && checkOut.isAfter(reservation.getArriveDateTime())) {
                     // There is a superposition.
                     return false;
                 }
@@ -191,7 +199,7 @@ public class ReserveService implements IReserveService {
         }
 
         // No superposition, the reservation is valid.
-        return checkIn.before(checkOut);
+        return checkIn.isBefore(checkOut);
     }
 
 

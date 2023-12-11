@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReadAdministrativeDto {
+public class UpdateAdministrativeDto {
 
     private Integer id;
     private String dni;

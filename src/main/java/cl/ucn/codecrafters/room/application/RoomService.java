@@ -1,18 +1,18 @@
 package cl.ucn.codecrafters.room.application;
 
-import cl.ucn.codecrafters.room.domain.RoomError;
 import cl.ucn.codecrafters.room.domain.IRoomRepository;
 import cl.ucn.codecrafters.room.domain.Room;
 import cl.ucn.codecrafters.room.domain.dtos.CreateRoomDto;
+import cl.ucn.codecrafters.room.domain.dtos.ReadRoomDto;
+import cl.ucn.codecrafters.room.domain.dtos.UpdateRoomDto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.apache.tomcat.util.http.parser.HttpParser.isNumeric;
 
 @Service
 @AllArgsConstructor
@@ -26,17 +26,32 @@ public class RoomService implements IRoomService {
      * Method responsible for listing all entities.
      *
      * @return All corresponding entities in a list.
-     * @throws Exception Exception.
      */
     @Override
-    public List<Room> findAll() throws Exception {
+    public List<ReadRoomDto> findAll() {
+
         List<Room> roomList = this.roomRepository.findAll();
 
-        if(roomList.isEmpty()){
-            return null;
+        List<ReadRoomDto> roomDtoList = new ArrayList<>();
+
+        for (Room room : roomList) {
+
+            if (room.getDeleted() == Boolean.FALSE){
+
+                ReadRoomDto roomDto = new ReadRoomDto();
+
+                roomDto.setId(room.getId());
+                roomDto.setIndividualBeds(room.getIndividualBeds());
+                roomDto.setDualBeds(room.getDualBeds());
+                roomDto.setMaxCapacity(room.getMaxCapacity());
+                roomDto.setHaveBathroom(room.getHaveBathroom());
+                roomDto.setPrice(room.getPrice());
+
+                roomDtoList.add(roomDto);
+            }
         }
 
-        return roomList;
+        return roomDtoList;
     }
 
     /**
@@ -110,12 +125,24 @@ public class RoomService implements IRoomService {
      * @throws Exception Exception.
      */
     @Override
-    public Room update(Integer integer, Room entity) throws Exception {
+    public Room update(Integer integer, UpdateRoomDto entity) throws Exception {
         try {
+
             Optional<Room> entityOptional = this.roomRepository.findById(integer);
-            Room entityUpdate = entityOptional.get();
-            entityUpdate = this.roomRepository.save(entity);
-            return entityUpdate;
+
+            if (entityOptional.isEmpty()){
+                throw new Exception("La habitación no existe.");
+            }
+
+            Room entityUpdated = entityOptional.get();
+
+            entityUpdated.setIndividualBeds(entity.getIndividualBeds());
+            entityUpdated.setDualBeds(entity.getDualBeds());
+            entityUpdated.setMaxCapacity(entity.getMaxCapacity());
+            entityUpdated.setHaveBathroom(entity.getHaveBathroom());
+            entityUpdated.setPrice(entity.getPrice());
+
+            return this.roomRepository.save(entityUpdated);
         }
         catch (Exception e){
             throw new Exception(e.getMessage());
@@ -149,52 +176,4 @@ public class RoomService implements IRoomService {
         }
     }
 
-    @Override
-    public RoomError validateRoomErrors(Room room){
-
-        RoomError roomErrors = new RoomError();
-
-        Boolean isValid = Boolean.TRUE;
-
-        //Max capacity validations
-
-        if(room.getMaxCapacity() < 1){
-
-            roomErrors.setNonNaturalMaxCapacityError("La capacidad máxima de la habitación no puede ser menor a 1");
-            isValid = Boolean.FALSE;
-        }
-
-        if(isNumeric(room.getMaxCapacity())){
-            roomErrors.setInvalidMaxCapacityError("La capacidad máxima de la habitación debe ser numérica");
-            isValid = Boolean.FALSE;
-        }
-
-        //Price validations
-
-        if(room.getPrice() < 1){
-
-            roomErrors.setNonNaturalPriceError("El precio de la habitación no puede ser menor a 1");
-            isValid = Boolean.FALSE;
-        }
-
-        if(!(room.getPrice() instanceof Integer)){
-            roomErrors.setInvalidPriceError("El precio de la habitacion debe ser numérico");
-            isValid = Boolean.FALSE;
-        }
-
-        //Beds amount validations
-
-        if((room.getDualBeds() <= 0 && room.getIndividualBeds() <= 0) || room.getDualBeds() < 0 || room.getIndividualBeds() < 0){
-            roomErrors.setNegativeBedAmountError("La cantidad de camas no pueden ser menor a 0");
-            isValid = Boolean.FALSE;
-        }
-
-        if(!(room.getDualBeds() instanceof Integer) || !(room.getIndividualBeds() instanceof Integer)){
-            roomErrors.setInvalidBedAmountError("La cantidad de camas debe ser numérica");
-            isValid = Boolean.FALSE;
-        }
-
-        roomErrors.setIsValid(isValid);
-        return roomErrors;
-    }
 }
