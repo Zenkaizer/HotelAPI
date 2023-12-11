@@ -1,21 +1,25 @@
 package cl.ucn.codecrafters.user.application;
 
-import cl.ucn.codecrafters.user.domain.UserError;
-import cl.ucn.codecrafters.user.domain.dtos.AdministrativeDto;
-import cl.ucn.codecrafters.user.domain.dtos.ClientDto;
-import cl.ucn.codecrafters.user.domain.dtos.UserDto;
+import cl.ucn.codecrafters.user.domain.administrative.CreateAdministrativeDto;
+import cl.ucn.codecrafters.user.domain.administrative.ReadAdministrativeDto;
+import cl.ucn.codecrafters.user.domain.administrative.UpdateAdministrativeDto;
+import cl.ucn.codecrafters.user.domain.client.CreateClientDto;
+import cl.ucn.codecrafters.user.domain.client.ReadClientDto;
+import cl.ucn.codecrafters.user.domain.client.UpdateClientDto;
 import cl.ucn.codecrafters.user.domain.entities.Role;
 import cl.ucn.codecrafters.user.domain.entities.User;
 import cl.ucn.codecrafters.user.domain.repositories.IUserRepository;
 import cl.ucn.codecrafters.utils.Validation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -27,52 +31,26 @@ public class UserService implements IUserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    /**
-     * Method responsible for listing all entities.
-     *
-     * @return All corresponding entities in a list.
-     * @throws Exception Exception.
-     */
     @Override
-    public List<User> findAllUsers() throws Exception {
-        try {
-            List<User> userList = this.userRepository.findAll();
-
-            if (userList.isEmpty()){
-                //TODO: Cambiar
-                System.out.println("[!] No existen usuarios en el sistema [!]");
-            }
-
-            return userList;
-        }
-        catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
-    }
-
-    @Override
-    public List<ClientDto> findAllClients() {
+    public List<ReadClientDto> findAllClients() {
 
         List<User> userList = this.userRepository.findByRole(Role.CLIENT);
-        List<ClientDto> clientList = new ArrayList<>();
-
-        if (userList.isEmpty()){
-            //TODO: Cambiar
-            System.out.println("[!] No existen usuarios en el sistema [!]");
-        }
+        List<ReadClientDto> clientList = new ArrayList<>();
 
         for (User user : userList){
 
-            ClientDto clientDto = new ClientDto();
+            if (user.getDeleted() == Boolean.FALSE){
+                ReadClientDto readClientDto = new ReadClientDto();
 
-            clientDto.setId(user.getId());
-            clientDto.setDni(user.getDni());
-            clientDto.setFirstName(user.getFirstName());
-            clientDto.setLastName(user.getLastName());
-            clientDto.setNationality(user.getNationality());
-            clientDto.setPhone(user.getPhone());
+                readClientDto.setId(user.getId());
+                readClientDto.setDni(user.getDni());
+                readClientDto.setFirstName(user.getFirstName());
+                readClientDto.setLastName(user.getLastName());
+                readClientDto.setNationality(user.getNationality());
+                readClientDto.setPhone(user.getPhone());
 
-            clientList.add(clientDto);
+                clientList.add(readClientDto);
+            }
 
         }
 
@@ -80,107 +58,85 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<AdministrativeDto> findAllAdministratives() {
-        List<User> userList = this.userRepository.findByRole(Role.ADMINISTRATIVE);
-        List<AdministrativeDto> adminitstrativeList = new ArrayList<>();
+    public List<ReadAdministrativeDto> findAllAdministratives() throws Exception {
 
-        if (userList.isEmpty()){
-            //TODO: Cambiar
-            System.out.println("[!] No existen usuarios en el sistema [!]");
-        }
-
-        for (User user : userList){
-
-            AdministrativeDto administrativeDto = new AdministrativeDto();
-
-            administrativeDto.setDni(user.getDni());
-            administrativeDto.setFirstName(user.getFirstName());
-            administrativeDto.setLastName(user.getLastName());
-            administrativeDto.setNationality(user.getNationality());
-            administrativeDto.setPhone(user.getPhone());
-
-            adminitstrativeList.add(administrativeDto);
-
-        }
-
-        return adminitstrativeList;
-    }
-
-    /**
-     * Method in charge of finding an entity according to its ID.
-     *
-     * @param integer Entity ID.
-     * @return An entity according to its ID.
-     * @throws Exception Exception.
-     */
-    @Override
-    public User findUserById(Integer integer) throws Exception {
         try {
-            Optional<User> entity = this.userRepository.findById(integer);
-            return entity.get();
+
+            List<User> userList = this.userRepository.findByRole(Role.ADMINISTRATIVE);
+            List<ReadAdministrativeDto> administrativeList = new ArrayList<>();
+
+            for (User user : userList){
+
+                if (user.getDeleted() == Boolean.FALSE){
+
+                    ReadAdministrativeDto administrativeDto = new ReadAdministrativeDto();
+
+                    administrativeDto.setId(user.getId());
+                    administrativeDto.setDni(user.getDni());
+                    administrativeDto.setFirstName(user.getFirstName());
+                    administrativeDto.setLastName(user.getLastName());
+                    administrativeDto.setEmail(user.getEmail());
+                    administrativeDto.setPhone(user.getPhone());
+
+                    administrativeList.add(administrativeDto);
+                }
+
+            }
+
+            return administrativeList;
+
         }
         catch (Exception e){
             throw new Exception(e.getMessage());
         }
+
     }
 
     @Override
-    public <E extends UserDto> E findUserDtoById(Integer id) {
+    public ReadClientDto findClientById(Integer id) {
+
+        Optional<User> userFounded = this.userRepository.findById(id);
+
+        if (userFounded.isPresent()){
+
+            User user = userFounded.get();
+
+            ReadClientDto readClientDto = new ReadClientDto();
+
+            readClientDto.setId(user.getId());
+            readClientDto.setDni(user.getDni());
+            readClientDto.setFirstName(user.getFirstName());
+            readClientDto.setLastName(user.getLastName());
+            readClientDto.setNationality(user.getNationality());
+            readClientDto.setPhone(user.getPhone());
+
+            return readClientDto;
+        }
+
         return null;
     }
 
-
     @Override
-    public UserError validateUserErrors(User user) {
+    public ReadAdministrativeDto findAdministrativeById(Integer id) {
+        Optional<User> userFounded = this.userRepository.findById(id);
 
-        UserError userErrors = new UserError();
-        Boolean isValid = Boolean.TRUE;
+        if (userFounded.isPresent()){
 
-        if (user.getDni() == null || user.getDni().trim().isEmpty()) {
-            userErrors.setDniError("El RUT/DNI no puede ser vacío o nulo.");
-            isValid = Boolean.FALSE;
+            User user = userFounded.get();
 
-        }
-        if (user.getEmail() == null || user.getEmail().trim().isEmpty() || !Validation.
-                        validatePattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Z|a-z]{2,}$", user.getEmail())) {
+            ReadAdministrativeDto readAdministrativeDto = new ReadAdministrativeDto();
 
-            userErrors.setEmailError("El correo electrónico es inválido.");
-            isValid = Boolean.FALSE;
+            readAdministrativeDto.setId(user.getId());
+            readAdministrativeDto.setDni(user.getDni());
+            readAdministrativeDto.setFirstName(user.getFirstName());
+            readAdministrativeDto.setLastName(user.getLastName());
+            readAdministrativeDto.setEmail(user.getEmail());
+            readAdministrativeDto.setPhone(user.getPhone());
 
-        }
-        if (!Validation.validatePattern("^(?=.*[0-9])(?=.*[A-Z]).{8,}$", user.getPassword())) {
-            userErrors.setPasswordError("La contraseña no cumple con los requisitos mínimos.");
-            isValid = Boolean.FALSE;
-
-        }
-        if (user.getFirstName() == null || user.getFirstName().trim().isEmpty()) {
-            userErrors.setFirstNameError("El campo no puede ser nulo o vacío.");
-            isValid = Boolean.FALSE;
-
-        }
-        if (user.getLastName() == null || user.getLastName().trim().isEmpty()) {
-            userErrors.setLastNameError("El campo no puede ser nulo o vacío.");
-            isValid = Boolean.FALSE;
-
-        }
-        if (user.getPhone().length() < 8 || !user.getPhone().matches("\\d+")) {
-            userErrors.setPhoneError("El teléfono debe contener al menos 8 dígitos y debe contener solo números.");
-            isValid = Boolean.FALSE;
-
-        }
-        if (user.getNationality() == null || user.getNationality().trim().isEmpty()) {
-            userErrors.setNationalityError("El campo no puede ser nulo o vacío.");
-            isValid = Boolean.FALSE;
-
-        }
-        if (user.getBirthDate() == null ||user.getBirthDate().after(new Date())) {
-            userErrors.setBirthDateError("La fecha de nacimiento no puede ser posterior a la actual.");
-            isValid = Boolean.FALSE;
-
+            return readAdministrativeDto;
         }
 
-        userErrors.setIsValid(isValid);
-        return userErrors;
+        return null;
     }
 
     /**
@@ -191,11 +147,28 @@ public class UserService implements IUserService {
      * @throws Exception Exception.
      */
     @Override
-    public User saveClient(User entity) throws Exception {
+    public User saveClient(CreateClientDto entity) throws Exception {
         try {
 
-            entity = this.userRepository.save(entity);
-            return entity;
+            User user = new User();
+
+            user.setDni(entity.getDni());
+            user.setEmail(entity.getEmail());
+            user.setFirstName(entity.getFirstName());
+            user.setLastName(entity.getLastName());
+            user.setPhone(entity.getPhone());
+            user.setNationality(entity.getNationality());
+
+            LocalDateTime birthDate = Validation.convertToLocalDate(entity.getBirthDate());
+            user.setBirthDate(birthDate);
+
+            // Password encode are the same as the DNI.
+            String password = entity.getDni().replace("-", "");
+            user.setPassword(this.passwordEncoder.encode(password));
+            user.setRole(Role.CLIENT);
+
+            user = this.userRepository.save(user);
+            return user;
         }
         catch (Exception e){
             throw new Exception(e.getMessage());
@@ -210,15 +183,27 @@ public class UserService implements IUserService {
      * @throws Exception Exception.
      */
     @Override
-    public User saveAdministrative(User entity) throws Exception {
+    public User saveAdministrative(CreateAdministrativeDto entity) throws Exception {
         try {
 
-            // Password encode and role assignation.
-            entity.setPassword(this.passwordEncoder.encode(entity.getPassword()));
-            entity.setRole(Role.ADMINISTRATIVE);
+            User user = new User();
 
-            entity = this.userRepository.save(entity);
-            return entity;
+            user.setDni(entity.getDni());
+            user.setEmail(entity.getEmail());
+            user.setFirstName(entity.getFirstName());
+            user.setLastName(entity.getLastName());
+            user.setPhone(entity.getPhone());
+            user.setNationality(entity.getNationality());
+
+            LocalDateTime birthDate = Validation.convertToLocalDate(entity.getBirthDate());
+            user.setBirthDate(birthDate);
+            // Password encode are the same as the DNI.
+            String password = entity.getDni().replace("-", "");
+            user.setPassword(this.passwordEncoder.encode(password));
+            user.setRole(Role.ADMINISTRATIVE);
+
+            user = this.userRepository.save(user);
+            return user;
         }
         catch (Exception e){
             throw new Exception(e.getMessage());
@@ -249,8 +234,16 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Boolean userEmailExists(String email) {
+    public boolean userEmailExists(String email) {
         return this.userRepository.existsUserByEmail(email);
+    }
+
+    @Override
+    public User findUserByEmail(String clientEmail) {
+
+        Optional<User> userOptional =  this.userRepository.findByEmail(clientEmail);
+
+        return userOptional.orElse(null);
     }
 
     /**
@@ -274,9 +267,109 @@ public class UserService implements IUserService {
         }
     }
 
+    @Override
+    public ReadClientDto updateClient(Integer id, UpdateClientDto entity) throws Exception {
+        try {
+
+            Optional<User> entityOptional = this.userRepository.findById(id);
+
+            if (entityOptional.isPresent()){
+
+                // Update the entity.
+                User entityUpdate = entityOptional.get();
+
+                if (entityUpdate.getRole() != Role.CLIENT){
+                    throw new Exception("The user isn't a client");
+                }
+
+                entityUpdate.setFirstName(entity.getFirstName());
+                entityUpdate.setLastName(entity.getLastName());
+                entityUpdate.setNationality(entity.getNationality());
+                entityUpdate.setPhone(entity.getPhone());
+
+                // Save the user.
+                entityUpdate = this.userRepository.save(entityUpdate);
+
+
+                // Create the ReadClientDto.
+                ReadClientDto readClientDto = new ReadClientDto();
+                readClientDto.setId(entityUpdate.getId());
+                readClientDto.setDni(entityUpdate.getDni());
+                readClientDto.setFirstName(entityUpdate.getFirstName());
+                readClientDto.setLastName(entityUpdate.getLastName());
+                readClientDto.setNationality(entityUpdate.getNationality());
+                readClientDto.setPhone(entityUpdate.getPhone());
+
+                return readClientDto;
+
+            }
+            else {
+                throw new Exception("The item hasn't founded");
+            }
+        }
+        catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+    }
+
+
+    @Override
+    public ReadAdministrativeDto updateAdministrative(Integer id, UpdateAdministrativeDto entity) throws Exception {
+        try {
+
+            Optional<User> entityOptional = this.userRepository.findById(id);
+
+            if (entityOptional.isPresent()){
+
+                // Update the entity.
+                User entityUpdate = entityOptional.get();
+
+                if (entityUpdate.getRole() != Role.ADMINISTRATIVE){
+                    throw new Exception("The user isn't a administrative");
+                }
+
+                if (userEmailExists(entityUpdate.getEmail())){
+
+                    var user = findUserByEmail(entityUpdate.getEmail());
+
+                    if (!Objects.equals(user.getDni(), entityUpdate.getDni())){
+                        throw new Exception("The email already exists");
+                    }
+                }
+
+                entityUpdate.setFirstName(entity.getFirstName());
+                entityUpdate.setLastName(entity.getLastName());
+                entityUpdate.setEmail(entity.getEmail());
+                entityUpdate.setPhone(entity.getPhone());
+
+                // Save the user.
+                entityUpdate = this.userRepository.save(entityUpdate);
+
+
+                // Create the ReadAdministrativeDto.
+                ReadAdministrativeDto readAdministrativeDto = new ReadAdministrativeDto();
+                readAdministrativeDto.setId(entityUpdate.getId());
+                readAdministrativeDto.setDni(entityUpdate.getDni());
+                readAdministrativeDto.setFirstName(entityUpdate.getFirstName());
+                readAdministrativeDto.setLastName(entityUpdate.getLastName());
+                readAdministrativeDto.setEmail(entityUpdate.getEmail());
+                readAdministrativeDto.setPhone(entityUpdate.getPhone());
+
+                return readAdministrativeDto;
+
+            }
+            else {
+                throw new Exception("The item hasn't founded");
+            }
+        }
+        catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+    }
+
+
     /**
      * Method responsible for removing an entity from the database.
-     *
      * @param integer Entity ID.
      * @return True if is deleted or False if not.
      * @throws Exception Exception.

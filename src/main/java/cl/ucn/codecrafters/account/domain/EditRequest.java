@@ -1,21 +1,15 @@
-package cl.ucn.codecrafters.user.domain.dtos;
+package cl.ucn.codecrafters.account.domain;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-
-/**
- * This class references a client created by an Administrator or Admin.
- */
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class CreateClientDto {
+@NoArgsConstructor
+public class EditRequest {
 
     private String dni;
     private String email;
@@ -23,6 +17,6 @@ public class CreateClientDto {
     private String lastName;
     private String phone;
     private String nationality;
-    private Date birthDate;
+    private String birthDate;
 
 }

@@ -10,13 +10,14 @@ import java.util.Date;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class CreateReserveDto {
+@AllArgsConstructor
+public class UpdateReserveDto {
 
     private Integer roomId;
     private String clientEmail;
     private String checkIn;
     private String checkOut;
+    private Boolean confirmed;
 
 }

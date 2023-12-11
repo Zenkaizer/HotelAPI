@@ -1,22 +1,28 @@
 package cl.ucn.codecrafters.reserve.application;
 
-import cl.ucn.codecrafters.reserve.domain.ReserveDto;
-import cl.ucn.codecrafters.reserve.domain.ReserveError;
 import cl.ucn.codecrafters.reserve.domain.IReserveRepository;
 import cl.ucn.codecrafters.reserve.domain.Reserve;
+import cl.ucn.codecrafters.reserve.domain.dtos.CreateReserveDto;
 import cl.ucn.codecrafters.reserve.domain.dtos.ReadReserveDto;
+import cl.ucn.codecrafters.reserve.domain.dtos.UpdateReserveDto;
 import cl.ucn.codecrafters.room.application.IRoomService;
 import cl.ucn.codecrafters.room.domain.Room;
 import cl.ucn.codecrafters.user.application.IUserService;
 import cl.ucn.codecrafters.user.domain.entities.User;
+import cl.ucn.codecrafters.utils.Validation;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @AllArgsConstructor
@@ -25,36 +31,43 @@ public class ReserveService implements IReserveService {
 
     @Autowired
     private IReserveRepository reserveRepository;
-
     @Autowired
     private IUserService userService;
-
     @Autowired
     private IRoomService roomService;
 
+
     /**
-     * Method responsible for listing all reserves.
-     * @return All corresponding reserves in a list.
+     * {@inheritDoc}
      */
     @Override
-    public List<ReadReserveDto> readAllReserves(){
+    public List<ReadReserveDto> readAll(){
 
         List<Reserve> reserveList = this.reserveRepository.findAll();
 
         List<ReadReserveDto> reserveDtoList = new ArrayList<>();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
         for (Reserve reserve : reserveList) {
 
             ReadReserveDto readReserveDto = new ReadReserveDto();
+
+            String checkIn = reserve.getArriveDateTime().format(formatter);
+            String checkOut = reserve.getLeaveDateTime().format(formatter);
 
             readReserveDto.setRoomId(reserve.getRoom().getId());
             readReserveDto.setClientRut(reserve.getUser().getDni());
             readReserveDto.setFirstName(reserve.getUser().getFirstName());
             readReserveDto.setLastName(reserve.getUser().getLastName());
-            readReserveDto.setCheckIn(reserve.getArriveDateTime().toString());
-            readReserveDto.setCheckOut(reserve.getLeaveDateTime().toString());
+            readReserveDto.setCheckIn(checkIn);
+            readReserveDto.setCheckOut(checkOut);
             readReserveDto.setConfirmed(reserve.getConfirmed());
 
+            Duration duration = Duration.between(reserve.getArriveDateTime(), reserve.getLeaveDateTime());
+            int diffInDays = (int) duration.toDays();
+
+            readReserveDto.setPrice(reserve.getRoom().getPrice() * diffInDays);
             reserveDtoList.add(readReserveDto);
         }
 
@@ -66,11 +79,7 @@ public class ReserveService implements IReserveService {
     }
 
     /**
-     * Method in charge of finding a reserve according to its ID.
-     *
-     * @param integer Reserve ID.
-     * @return A reserve according to its ID.
-     * @throws Exception Exception.
+     * {@inheritDoc}
      */
     @Override
     public Reserve findById(Integer integer) throws Exception {
@@ -84,74 +93,7 @@ public class ReserveService implements IReserveService {
     }
 
     /**
-     * Method responsible for storing a reserve in the database.
-     *
-     * @param entity Reserve.
-     * @return The saved reserve.
-     * @throws Exception Exception.
-     */
-    @Override
-    public Reserve save(ReserveDto entity) throws Exception {
-        try {
-
-            Reserve reserve = new Reserve();
-            LocalDateTime dateTime = LocalDateTime.now();
-
-            User user = userService.findUserById(entity.getUserDni());
-            Room room = roomService.findById(entity.getRoomNumber());
-
-            reserve.setUser(user);
-            reserve.setRoom(room);
-            reserve.setReserveDateTime(dateTime);
-            reserve.setArriveDateTime(entity.getArriveDateTime());
-            reserve.setLeaveDateTime(entity.getLeaveDateTime());
-            reserve.setConfirmed(entity.getConfirmed());
-
-            reserve = this.reserveRepository.save(reserve);
-            return reserve;
-        }
-        catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
-    }
-
-    /**
-     * Method responsible for updating a reserve in the database.
-     *
-     * @param integer Entity ID.
-     * @param entity  Entity.
-     * @return The updated entity.
-     * @throws Exception Exception.
-     */
-    @Override
-    public Reserve update(Integer integer, ReserveDto entity) throws Exception {
-        try {
-            Optional<Reserve> entityOptional = this.reserveRepository.findById(integer);
-            Reserve entityUpdate = entityOptional.get();
-
-            LocalDateTime dateTime = LocalDateTime.now();
-            Reserve reserve = new Reserve();
-
-            reserve.setUser(userService.findUserById(entity.getUserDni()));
-            reserve.setRoom(roomService.findById(entity.getRoomNumber()));
-            reserve.setReserveDateTime(dateTime);
-            reserve.setArriveDateTime(entity.getArriveDateTime());
-            reserve.setLeaveDateTime(entity.getLeaveDateTime());
-            reserve.setConfirmed(entity.getConfirmed());
-            entityUpdate = this.reserveRepository.save(reserve);
-            return entityUpdate;
-        }
-        catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
-    }
-
-    /**
-     * Method responsible for removing a reserve from the database.
-     *
-     * @param integer Reserve ID.
-     * @return True if is deleted or False if not.
-     * @throws Exception Exception.
+     * {@inheritDoc}
      */
     @Override
     public boolean delete(Integer integer) throws Exception {
@@ -173,66 +115,91 @@ public class ReserveService implements IReserveService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public ReserveError validateReserveErrors(ReserveDto reserve){
+    public Reserve create(CreateReserveDto entity) throws Exception {
 
-        LocalDateTime actualDateTime = LocalDateTime.now();
+        Reserve reserve = new Reserve();
 
-        ReserveError reserveErrors = new ReserveError();
-        Boolean isValid = Boolean.TRUE;
+        LocalDateTime checkIn = Validation.convertToLocalDate(entity.getCheckIn());
+        LocalDateTime checkOut = Validation.convertToLocalDate(entity.getCheckOut());
 
-        //Datetime validations
-
-        if(reserve.getLeaveDateTime().isBefore(reserve.getArriveDateTime())){
-
-            reserveErrors.setLeaveBeforeArriveError("La fecha de salida no puede ser inferior a la fecha de llegada");
-            isValid = Boolean.FALSE;
+        if (!validateReserve(-1, checkIn, checkOut)) {
+            throw new Exception("La reserva no es válida.");
         }
 
-        if(reserve.getArriveDateTime().isBefore(actualDateTime)){
+        User user = userService.findUserByEmail(entity.getClientEmail());
+        Room room = roomService.findById(entity.getRoomId());
 
-            reserveErrors.setArriveBeforeNowError("La fecha de llegada no puede ser inferior a la actual");
-            isValid = Boolean.FALSE;
+        reserve.setUser(user);
+        reserve.setRoom(room);
+        reserve.setReserveDateTime(LocalDateTime.now());
+        reserve.setArriveDateTime(checkIn);
+        reserve.setLeaveDateTime(checkOut);
+        reserve.setConfirmed(Boolean.FALSE);
+
+        return this.reserveRepository.save(reserve);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(Integer id, UpdateReserveDto entity) throws Exception {
+
+        Reserve reserve = this.findById(id);
+
+        reserve.setRoom(roomService.findById(entity.getRoomId()));
+        reserve.setUser(userService.findUserByEmail(entity.getClientEmail()));
+
+        LocalDateTime checkIn = Validation.convertToLocalDate(entity.getCheckIn());
+        LocalDateTime checkOut = Validation.convertToLocalDate(entity.getCheckOut());
+
+        if (!validateReserve(id, checkIn, checkOut)) {
+            throw new Exception("La reserva no es válida.");
         }
 
-        if(reserve.getLeaveDateTime().isBefore(actualDateTime)){
-            reserveErrors.setArriveBeforeNowError("La fecha de salida no puede ser inferior a la fecha actual");
-            isValid = Boolean.FALSE;
-        }
+        reserve.setArriveDateTime(checkIn);
+        reserve.setLeaveDateTime(checkOut);
+        reserve.setConfirmed(entity.getConfirmed());
 
-        /*
-        if(reserve.getLeaveDateTime().isBefore(reserve.getReserveDateTime())){
-            reserveErrors.setLeaveBeforeReserveTimeError("La fecha de salida no puede ser inferior a la fecha de reserva");
-            isValid = Boolean.FALSE;
-        }
+        this.reserveRepository.save(reserve);
 
-        if(reserve.getArriveDateTime().isBefore(reserve.getReserveDateTime())){
-            reserveErrors.setArriveBeforeReserveTimeError("La fecha de llegada no puede ser inferior a la fecha de la reserva");
-            isValid = Boolean.FALSE;
-        }
-        */
+    }
 
-        //Room validations
+    /**
+     * Method responsible for validating a reservation.
+     * @param currentReservationId The current reservation id.
+     * @param checkIn The checkIn date.
+     * @param checkOut The checkOut date.
+     * @return True if the reservation is valid, false otherwise.
+     */
+    private boolean validateReserve(int currentReservationId, LocalDateTime checkIn, LocalDateTime checkOut) {
 
-        try {
-            List<Reserve> reserveList = this.reserveRepository.findAll();
+        // Obtains all the reservations.
+        List<Reserve> reserveList = this.reserveRepository.findAll();
 
-            for (Reserve r:reserveList) {
+        // Iterates over the reservations.
+        for (Reserve reservation : reserveList) {
 
-                if(r.getRoom().getId().equals(reserve.getRoomNumber()) && (r.getArriveDateTime().equals(reserve.getArriveDateTime()) ||
-                        r.getLeaveDateTime().equals(reserve.getLeaveDateTime()))){
-                    reserveErrors.setSameReserveIntervalError("Habitación ya reservada para ese intervalo de tiempo");
-                    isValid = Boolean.FALSE;
+            // Verify if the reservation is the current reservation.
+            if (reservation.getId() != currentReservationId) {
+
+                // Verify if the checkIn and checkOut dates are between the reservation dates.
+                if (checkIn.isBefore(reservation.getLeaveDateTime()) && checkOut.isAfter(reservation.getArriveDateTime())) {
+                    // There is a superposition.
+                    return false;
                 }
+
             }
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
 
-        reserveErrors.setIsValid(isValid);
-        return reserveErrors;
-
+        // No superposition, the reservation is valid.
+        return checkIn.isBefore(checkOut);
     }
 
 

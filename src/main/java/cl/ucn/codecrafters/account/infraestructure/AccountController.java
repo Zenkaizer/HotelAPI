@@ -1,19 +1,15 @@
 package cl.ucn.codecrafters.account.infraestructure;
 
 import cl.ucn.codecrafters.account.application.AccountService;
-import cl.ucn.codecrafters.account.domain.LoginRequest;
-import cl.ucn.codecrafters.account.domain.AuthResponse;
-import cl.ucn.codecrafters.account.domain.RegisterRequest;
-import cl.ucn.codecrafters.account.domain.UpdateRequest;
+import cl.ucn.codecrafters.account.domain.*;
 import cl.ucn.codecrafters.user.application.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/auth")
@@ -83,6 +79,44 @@ public class AccountController {
         }
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/profile")
+    public ResponseEntity<?> updateProfile(@RequestBody EditRequest request) {
+
+
+        if (this.userService.userEmailExists(request.getEmail())){
+
+            var user = this.userService.findUserByEmail(request.getEmail());
+
+            if (!Objects.equals(user.getDni(), request.getDni())){
+                return ResponseEntity.badRequest().body("El email seleccionado ya existe.");
+            }
+        }
+
+        AuthResponse response = this.accountService.updateUser(request);
+
+        if (response == null){
+            return ResponseEntity.badRequest().body("Ha ocurrido un error, intentelo nuevamente.");
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> getActualUser(@PathVariable Integer id) {
+        try {
+
+            var user = this.accountService.findUserById(id);
+
+            if (user == null){
+                return ResponseEntity.badRequest().body("El usuario no existe.");
+            }
+
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Ha ocurrido un error, intentelo nuevamente.");
+        }
     }
 
 }

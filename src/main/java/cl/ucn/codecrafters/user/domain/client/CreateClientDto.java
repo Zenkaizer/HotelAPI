@@ -1,35 +1,29 @@
-package cl.ucn.codecrafters.account.domain;
+package cl.ucn.codecrafters.user.domain.client;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Data
-@Builder
-@AllArgsConstructor
+/**
+ * This class references a client created by an Administrator or Admin.
+ */
+@Getter
+@Setter
 @NoArgsConstructor
-public class RegisterRequest {
+@AllArgsConstructor
+public class CreateClientDto {
 
     private String dni;
-
     private String email;
-
     private String firstName;
-
     private String lastName;
-
     private String phone;
-
     private String nationality;
-
-    private LocalDateTime birthDate;
-
-    private String password;
-
-    private String repeatPassword;
+    private String birthDate;
 
 }

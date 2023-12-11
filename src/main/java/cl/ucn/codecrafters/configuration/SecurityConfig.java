@@ -50,11 +50,11 @@ public class SecurityConfig{
                     .requestMatchers(PUT, "/administratives/**").hasAuthority(ADMIN_UPDATE.name())
                     .requestMatchers(DELETE, "/administratives/**").hasAuthority(ADMIN_DELETE.name())
 
-                    .requestMatchers("/reserves/**").hasAnyRole(CLIENT.name(),ADMINISTRATIVE.name())
+                    .requestMatchers("/reserves/**").hasAnyRole(CLIENT.name(),ADMINISTRATIVE.name(), ADMIN.name())
 
-                    .requestMatchers(GET, "/reserves/**").hasAnyAuthority(CLIENT_DELETE.name(), ADMINISTRATIVE_DELETE.name())
-                    .requestMatchers(POST, "/reserves/**").hasAuthority(CLIENT_DELETE.name())
-                    .requestMatchers(PUT, "/reserves/**").hasAnyAuthority(CLIENT_DELETE.name(), ADMINISTRATIVE_DELETE.name())
+                    .requestMatchers(GET, "/reserves/**").hasAnyAuthority(CLIENT_READ.name(), ADMINISTRATIVE_READ.name())
+                    .requestMatchers(POST, "/reserves/**").hasAuthority(CLIENT_CREATE.name())
+                    .requestMatchers(PUT, "/reserves/**").hasAnyAuthority(CLIENT_UPDATE.name(), ADMINISTRATIVE_UPDATE.name())
                     .requestMatchers(DELETE, "/reserves/**").hasAnyAuthority(CLIENT_DELETE.name(), ADMINISTRATIVE_DELETE.name())
 
                     .requestMatchers("/rooms/**").hasAnyRole(CLIENT.name(),ADMINISTRATIVE.name(),ADMIN.name())

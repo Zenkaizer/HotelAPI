@@ -1,39 +1,42 @@
 package cl.ucn.codecrafters.user.application;
 
-import cl.ucn.codecrafters.user.domain.UserError;
-import cl.ucn.codecrafters.user.domain.dtos.AdministrativeDto;
-import cl.ucn.codecrafters.user.domain.dtos.ClientDto;
+import cl.ucn.codecrafters.user.domain.administrative.CreateAdministrativeDto;
+import cl.ucn.codecrafters.user.domain.administrative.ReadAdministrativeDto;
+import cl.ucn.codecrafters.user.domain.administrative.UpdateAdministrativeDto;
+import cl.ucn.codecrafters.user.domain.client.CreateClientDto;
+import cl.ucn.codecrafters.user.domain.client.ReadClientDto;
+import cl.ucn.codecrafters.user.domain.client.UpdateClientDto;
 import cl.ucn.codecrafters.user.domain.entities.User;
-import cl.ucn.codecrafters.user.domain.dtos.UserDto;
 
 import java.util.List;
 
 public interface IUserService {
 
+    User findUserByEmail(String clientEmail);
 
-    List<User> findAllUsers() throws Exception;
+    List<ReadClientDto> findAllClients();
 
-    List<ClientDto> findAllClients();
+    List<ReadAdministrativeDto> findAllAdministratives() throws Exception;
 
-    List<AdministrativeDto> findAllAdministratives();
+    ReadClientDto findClientById(Integer id);
 
-    User findUserById(Integer integer) throws Exception;
+    ReadAdministrativeDto findAdministrativeById(Integer id);
 
-    <E extends UserDto> E findUserDtoById(Integer id);
+    User saveClient(CreateClientDto entity) throws Exception;
 
-    UserError validateUserErrors(User user);
+    User saveAdministrative(CreateAdministrativeDto entity) throws Exception;
+
+    User saveAdmin(User entity) throws Exception;
 
     boolean delete(Integer integer) throws Exception;
 
     User update(Integer integer, User entity) throws Exception;
 
-    User saveClient(User entity) throws Exception;
+    ReadClientDto updateClient(Integer id, UpdateClientDto entity) throws Exception;
 
-    User saveAdministrative(User entity) throws Exception;
+    ReadAdministrativeDto updateAdministrative(Integer id, UpdateAdministrativeDto entity) throws Exception;
 
-    User saveAdmin(User entity) throws Exception;
-
-    Boolean userEmailExists(String email);
+    boolean userEmailExists(String email);
 
 
 }

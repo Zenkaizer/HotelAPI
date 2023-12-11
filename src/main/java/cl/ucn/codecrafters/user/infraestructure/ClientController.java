@@ -1,11 +1,12 @@
 package cl.ucn.codecrafters.user.infraestructure;
 
 import cl.ucn.codecrafters.user.application.IUserService;
+import cl.ucn.codecrafters.user.domain.client.UpdateClientDto;
 import cl.ucn.codecrafters.user.domain.entities.Role;
 import cl.ucn.codecrafters.user.domain.entities.User;
-import cl.ucn.codecrafters.user.domain.UserError;
-import cl.ucn.codecrafters.user.domain.dtos.ClientDto;
-import cl.ucn.codecrafters.user.domain.dtos.CreateClientDto;
+import cl.ucn.codecrafters.user.domain.client.ReadClientDto;
+import cl.ucn.codecrafters.user.domain.client.CreateClientDto;
+import cl.ucn.codecrafters.utils.Validation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -21,9 +23,7 @@ import java.util.List;
 public class ClientController {
 
     @Autowired
-    protected IUserService userService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private IUserService userService;
 
     /**
      * This method returns all clients for the system.
@@ -51,17 +51,16 @@ public class ClientController {
     public ResponseEntity<?> getOneClient(@PathVariable Integer id) {
         try {
 
-            ClientDto clientDto = this.userService.findUserDtoById(id);
-            if (clientDto == null){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("{\"error\":\"Error, usuario no encontrado.\"}");
+            ReadClientDto readClientDto = this.userService.findClientById(id);
+
+            if (readClientDto == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error, usuario no encontrado.");
             }else{
-                return ResponseEntity.status(HttpStatus.OK).body(clientDto);
+                return ResponseEntity.status(HttpStatus.OK).body(readClientDto);
             }
         }
         catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("{\"error\":\"Error, por favor intente más tarde.\"}");
+            return ResponseEntity.badRequest().body("Error, por favor intente más tarde.");
         }
     }
 
@@ -73,48 +72,31 @@ public class ClientController {
                 return ResponseEntity.badRequest().body("El correo electrónico ya existe.");
             }
 
-            if (createClient.getBirthDate().compareTo(new Date()) > 0){
+            LocalDateTime now = LocalDateTime.now();
+
+            LocalDateTime birthDate = Validation.convertToLocalDate(createClient.getBirthDate());
+
+            // Compare the birth date with today's date.
+            if (birthDate.isAfter(now)) {
                 return ResponseEntity.badRequest().body("La fecha de nacimiento no puede ser después de hoy.");
             }
 
-
-            User user = new User();
-
-            user.setDni(createClient.getDni());
-            user.setEmail(createClient.getEmail());
-            // Remove the - character for no spaces.
-            user.setPassword(passwordEncoder.encode(createClient.getDni().replace("-", "")));
-            user.setFirstName(createClient.getFirstName());
-            user.setLastName(createClient.getLastName());
-            user.setPhone(createClient.getPhone());
-            user.setNationality(createClient.getNationality());
-            user.setBirthDate(createClient.getBirthDate());
-            user.setRole(Role.CLIENT);
-
-            this.userService.saveClient(user);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado exitosamete");
+            User user = this.userService.saveClient(createClient);
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
         }
         catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("{\"error\":\"Error, por favor intente más tarde.\"}");
+            return ResponseEntity.badRequest().body("Error, por favor intente más tarde.");
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateClient(@PathVariable Integer id, @RequestBody User entity) {
+    public ResponseEntity<?> updateClient(@PathVariable Integer id, @RequestBody UpdateClientDto entity) {
         try {
-            UserError userError = this.userService.validateUserErrors(entity);
 
-            if (userError.getIsValid()){
-                return ResponseEntity.status(HttpStatus.OK).body(this.userService.update(id, entity));
-            }
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userError);
+            return ResponseEntity.status(HttpStatus.OK).body(this.userService.updateClient(id, entity));
         }
         catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("{\"error\":\"Error, por favor intente más tarde.\"}");
+            return ResponseEntity.badRequest().body("Error, por favor intente más tarde.");
         }
     }
 
